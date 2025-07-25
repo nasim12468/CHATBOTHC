@@ -17,10 +17,10 @@ def verify():
 
     print(f"[WEBHOOK VERIFY] mode={mode}, token={token}, challenge={challenge}")
     if mode == 'subscribe' and token == VERIFY_TOKEN:
-        print("[WEBHOOK VERIFY] ✅ OK")
+        print("[WEBHOOK VERIFY] OK")
         return challenge, 200
 
-    print("[WEBHOOK VERIFY] ❌ FAILED")
+    print("[WEBHOOK VERIFY] FAILED")
     return 'Forbidden', 403
 
 @app.route('/webhook', methods=['POST'])
