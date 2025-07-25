@@ -3,7 +3,7 @@ import os
 import requests
 from dotenv import load_dotenv
 
-load_dotenv()  # load environment variables from .env
+load_dotenv()
 
 app = Flask(__name__)
 VERIFY_TOKEN = os.getenv('VERIFY_TOKEN')
@@ -11,36 +11,53 @@ ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
 
 @app.route('/webhook', methods=['GET'])
 def verify():
-    if request.args.get('hub.mode') == 'subscribe' and        request.args.get('hub.verify_token') == VERIFY_TOKEN:
-        return request.args.get('hub.challenge'), 200
+    mode      = request.args.get('hub.mode')
+    token     = request.args.get('hub.verify_token')
+    challenge = request.args.get('hub.challenge')
+
+    print(f"[WEBHOOK VERIFY] mode={mode}, token={token}, challenge={challenge}")
+    if mode == 'subscribe' and token == VERIFY_TOKEN:
+        print("[WEBHOOK VERIFY] ✅ OK")
+        return challenge, 200
+
+    print("[WEBHOOK VERIFY] ❌ FAILED")
     return 'Forbidden', 403
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
+    print("[WEBHOOK PAYLOAD]", data)
+
     for entry in data.get('entry', []):
         for msg in entry.get('messaging', []):
-            text = msg.get('message', {}).get('text', '').lower()
             sender = msg.get('sender', {}).get('id')
-            if not sender or not text:
-                continue
-            if 'привет' in text:
+            text   = msg.get('message', {}).get('text', '')
+
+            print(f"[INCOMING] from={sender} text={text!r}")
+
+            reply = None
+            txt = text.lower()
+            if 'привет' in txt:
                 reply = 'Привет! Чем могу помочь?'
-            elif 'цены' in text:
-                reply = 'Наши цены: ...'
-            else:
-                reply = 'Не понял ваш запрос.'
-            send_message(sender, reply)
+            elif 'цены' in txt:
+                reply = 'Наши цены: …'
+            # elif ... добавьте свои ключевые слова
+
+            if reply:
+                print(f"[REPLY] to={sender} text={reply!r}")
+                resp = send_message(sender, reply)
+                print(f"[FB RESP] status={resp.status_code} body={resp.text}")
+
     return 'OK', 200
 
 def send_message(recipient_id, text):
-    url = f'https://graph.facebook.com/v17.0/me/messages'
+    url = 'https://graph.facebook.com/v17.0/me/messages'
     params = {'access_token': ACCESS_TOKEN}
     payload = {
         'recipient': {'id': recipient_id},
         'message': {'text': text}
     }
-    requests.post(url, params=params, json=payload)
+    return requests.post(url, params=params, json=payload)
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
