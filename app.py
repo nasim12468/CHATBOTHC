@@ -17,16 +17,16 @@ def verify():
 
     print(f"[WEBHOOK VERIFY] mode={mode}, token={token}, challenge={challenge}")
     if mode == 'subscribe' and token == VERIFY_TOKEN:
-        print("[WEBHOOK VERIFY] OK")
+        print("[WEBHOOK VERIFY] OK", data, flush=True)
         return challenge, 200
 
-    print("[WEBHOOK VERIFY] FAILED")
+    print("[WEBHOOK VERIFY] FAILED", data, flush=True)
     return 'Forbidden', 403
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
-    print("[WEBHOOK PAYLOAD]", data)
+    print("[WEBHOOK PAYLOAD]", data, flush=True)
 
     for entry in data.get('entry', []):
         for msg in entry.get('messaging', []):
