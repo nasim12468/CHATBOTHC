@@ -19,54 +19,73 @@ def verify():
     mode      = request.args.get('hub.mode')
     token     = request.args.get('hub.verify_token')
     challenge = request.args.get('hub.challenge')
-    print(f"[WEBHOOK VERIFY] mode={mode}, token={token}, challenge={challenge}", flush=True)
-
     if mode == 'subscribe' and token == VERIFY_TOKEN:
-        print("[WEBHOOK VERIFY] OK", flush=True)
         return challenge, 200
-
-    print("[WEBHOOK VERIFY] FAILED", flush=True)
     return 'Forbidden', 403
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
-    print("[WEBHOOK PAYLOAD]", data, flush=True)
-
-    # Обрабатываем все записи
     for entry in data.get('entry', []):
         for msg in entry.get('messaging', []):
             sender = msg['sender']['id']
             text   = msg.get('message', {}).get('text', '')
-            print(f"[INCOMING] from={sender} text={text!r}", flush=True)
 
             # Определяем ответ по ключевым словам
             txt = text.lower()
-            reply = None
-            if 'привет' in txt:
-                reply = 'Привет! Чем могу помочь?'
-            elif 'цены' in txt:
-                reply = 'Наши цены: …'
-            # elif 'другое_слово' in txt:
-            #     reply = 'Ваш ответ'
 
-            if reply:
-                print(f"[REPLY] to={sender} text={reply!r}", flush=True)
-                resp = send_message(sender, reply)
-                print(f"[FB RESP] status={resp.status_code} body={resp.text}", flush=True)
+            if 'привет' in txt:
+                # Обычный текстовый ответ
+                send_message(sender, 'Привет! Чем могу помочь?')
+
+            elif 'цены' in txt:
+                # Отправляем шаблон с кнопками для раздела "Цены"
+                buttons = [
+                    { 'type': 'postback', 'title': 'Стандартный', 'payload': 'PRICE_STANDARD' },
+                    { 'type': 'postback', 'title': 'Премиум',      'payload': 'PRICE_PREMIUM' }
+                ]
+                send_button_template(sender, 'Выберите тариф:', buttons)
+
+            elif 'контакты' in txt:
+                # Ещё один пример кнопки, ведущей на внешнюю ссылку
+                buttons = [
+                    { 'type': 'web_url', 'title': 'Открыть сайт', 'url': 'https://hijamaschool.example.com' }
+                ]
+                send_button_template(sender, 'Наш сайт с контактами:', buttons)
+
+            # можно добавить другие варианты
 
     return 'OK', 200
 
+
 def send_message(recipient_id, text):
-    # Отправляем сообщение от имени страницы PAGE_ID
     url = f'https://graph.facebook.com/v23.0/{PAGE_ID}/messages'
     params = {'access_token': ACCESS_TOKEN}
     payload = {
         'recipient': {'id': recipient_id},
         'message':   {'text': text}
     }
-    print("[SEND_MESSAGE] URL=", url, " TOKEN…", ACCESS_TOKEN[:10] + '…', flush=True)
     return requests.post(url, params=params, json=payload)
+
+
+def send_button_template(recipient_id, text, buttons):
+    url = f'https://graph.facebook.com/v23.0/{PAGE_ID}/messages'
+    params = {'access_token': ACCESS_TOKEN}
+    payload = {
+        'recipient': {'id': recipient_id},
+        'message': {
+            'attachment': {
+                'type': 'template',
+                'payload': {
+                    'template_type': 'button',
+                    'text': text,
+                    'buttons': buttons
+                }
+            }
+        }
+    }
+    return requests.post(url, params=params, json=payload)
+
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
