@@ -1,92 +1,98 @@
 from flask import Flask, request
-import os
 import requests
-from dotenv import load_dotenv
-
-load_dotenv()
+import os
+import google.generativeai as genai
 
 app = Flask(__name__)
 
-# Токены из переменных окружения Render
-VERIFY_TOKEN = os.getenv('VERIFY_TOKEN')
-ACCESS_TOKEN = os.getenv('ACCESS_TOKEN')
+# Загрузка переменных среды
+VERIFY_TOKEN = os.getenv("VERIFY_TOKEN")
+PAGE_ACCESS_TOKEN = os.getenv("PAGE_ACCESS_TOKEN")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-# Явно указываем Page ID Hijama School
-PAGE_ID = '100346212770134'
+# Выводим токены (обрезанные) в консоль
+print("✅ VERIFY_TOKEN (first 10):", VERIFY_TOKEN[:10] if VERIFY_TOKEN else "Not found")
+print("✅ PAGE_ACCESS_TOKEN (first 10):", PAGE_ACCESS_TOKEN[:10] if PAGE_ACCESS_TOKEN else "Not found")
+print("✅ GEMINI_API_KEY (first 10):", GEMINI_API_KEY[:10] if GEMINI_API_KEY else "Not found")
 
-@app.route('/webhook', methods=['GET'])
+# Проверка наличия токенов
+if not VERIFY_TOKEN or not PAGE_ACCESS_TOKEN or not GEMINI_API_KEY:
+    print("❌ Ошибка: Одна или несколько переменных среды не установлены!")
+    exit(1)
+
+# Инициализация Gemini
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-pro")
+
+# Системный промпт
+SYSTEM_PROMPT = """
+Siz Hijama markazining sun'iy intellekt yordamchisiz.
+Siz har doim mijozlarga muloyim, hurmatli va foydali tarzda javob berishingiz kerak.
+Savollarga qisqa, tushunarli va do'stona ohangda javob bering.
+Faqat o'zbek tilida yozing.
+"""
+
+# Проверка Meta App (GET)
+@app.route("/", methods=["GET"])
 def verify():
-    mode      = request.args.get('hub.mode')
-    token     = request.args.get('hub.verify_token')
-    challenge = request.args.get('hub.challenge')
-    if mode == 'subscribe' and token == VERIFY_TOKEN:
-        return challenge, 200
-    return 'Forbidden', 403
+    mode = request.args.get("hub.mode")
+    token = request.args.get("hub.verify_token")
+    challenge = request.args.get("hub.challenge")
+    print("🌐 [VERIFY] mode:", mode, "| token:", token)
 
-@app.route('/webhook', methods=['POST'])
+    if mode == "subscribe" and token == VERIFY_TOKEN:
+        print("✅ Вебхук подтверждён")
+        return challenge, 200
+    print("❌ Неверный verify token")
+    return "Verification failed", 403
+
+# Обработка сообщений (POST)
+@app.route("/", methods=["POST"])
 def webhook():
     data = request.get_json()
-    for entry in data.get('entry', []):
-        for msg in entry.get('messaging', []):
-            sender = msg['sender']['id']
-            text   = msg.get('message', {}).get('text', '')
+    print("📩 [WEBHOOK] Получены данные:", data)
 
-            # Определяем ответ по ключевым словам
-            txt = text.lower()
+    for entry in data.get("entry", []):
+        for messaging_event in entry.get("messaging", []):
+            sender_id = messaging_event["sender"]["id"]
+            if "message" in messaging_event and "text" in messaging_event["message"]:
+                user_msg = messaging_event["message"]["text"]
+                print(f"👤 Сообщение от пользователя ({sender_id}): {user_msg}")
 
-            if 'привет' in txt:
-                # Обычный текстовый ответ
-                send_message(sender, 'Привет! Чем могу помочь?')
+                reply = ask_gemini(user_msg)
+                print("🤖 Ответ Gemini:", reply)
 
-            elif 'цены' in txt:
-                # Отправляем шаблон с кнопками для раздела "Цены"
-                buttons = [
-                    { 'type': 'postback', 'title': 'Стандартный', 'payload': 'PRICE_STANDARD' },
-                    { 'type': 'postback', 'title': 'Премиум',      'payload': 'PRICE_PREMIUM' }
-                ]
-                send_button_template(sender, 'Выберите тариф:', buttons)
+                send_message(sender_id, reply)
+            else:
+                print("⚠️ Не текстовое сообщение или отсутствует поле message")
+    return "ok", 200
 
-            elif 'контакты' in txt:
-                # Ещё один пример кнопки, ведущей на внешнюю ссылку
-                buttons = [
-                    { 'type': 'web_url', 'title': 'Открыть сайт', 'url': 'https://hijamaschool.example.com' }
-                ]
-                send_button_template(sender, 'Наш сайт с контактами:', buttons)
+# Генерация ответа от Gemini
+def ask_gemini(question):
+    try:
+        response = model.generate_content(SYSTEM_PROMPT + f"\nSavol: {question}\nJavob:")
+        return response.text.strip()
+    except Exception as e:
+        print("❌ Ошибка при генерации ответа от Gemini:", e)
+        return "Kechirasiz, xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
 
-            # можно добавить другие варианты
-
-    return 'OK', 200
-
-
-def send_message(recipient_id, text):
-    url = f'https://graph.facebook.com/v23.0/{PAGE_ID}/messages'
-    params = {'access_token': ACCESS_TOKEN}
-    payload = {
-        'recipient': {'id': recipient_id},
-        'message':   {'text': text}
+# Отправка ответа пользователю в Instagram
+def send_message(recipient_id, message_text):
+    params = {"access_token": PAGE_ACCESS_TOKEN}
+    headers = {"Content-Type": "application/json"}
+    data = {
+        "recipient": {"id": recipient_id},
+        "message": {"text": message_text}
     }
-    return requests.post(url, params=params, json=payload)
 
+    try:
+        r = requests.post("https://graph.facebook.com/v18.0/me/messages", params=params, headers=headers, json=data)
+        print(f"📤 Ответ отправлен пользователю ({recipient_id}): {message_text}")
+        print("📡 Ответ сервера Meta:", r.status_code, r.text)
+    except Exception as e:
+        print("❌ Ошибка при отправке сообщения:", e)
 
-def send_button_template(recipient_id, text, buttons):
-    url = f'https://graph.facebook.com/v23.0/{PAGE_ID}/messages'
-    params = {'access_token': ACCESS_TOKEN}
-    payload = {
-        'recipient': {'id': recipient_id},
-        'message': {
-            'attachment': {
-                'type': 'template',
-                'payload': {
-                    'template_type': 'button',
-                    'text': text,
-                    'buttons': buttons
-                }
-            }
-        }
-    }
-    return requests.post(url, params=params, json=payload)
-
-
-if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+# Запуск Flask-сервера
+if __name__ == "__main__":
+    print("🚀 Бот запущен. Ожидание запросов...")
+    app.run(debug=True, host="0.0.0.0", port=5000)
