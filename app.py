@@ -4,8 +4,6 @@ import os
 import google.generativeai as genai
 import logging
 import re # Regular expressions for phone number detection
-from langdetect import detect # Tilni aniqlash uchun yangi import
-from googletrans import Translator # Tarjima qilish uchun yangi import
 import time # Vaqtni eslab qolish uchun
 
 # Настройка логирования
@@ -50,9 +48,6 @@ try:
 except Exception as e:
     logging.error(f"❌ Gemini API'ni ishga tushirishda xato: {e}", exc_info=True) # Добавляем exc_info для полного traceback
 
-# Tilni aniqlash va tarjima qilish uchun Translator obyektini yaratish
-translator = Translator()
-
 # YANGI: Qayta ishlangan xabar ID'larini saqlash uchun set
 processed_message_ids = set()
 # YANGI: Foydalanuvchilarning oxirgi salomlashish vaqtini saqlash uchun lug'at
@@ -64,6 +59,7 @@ user_last_greeting_time = {}
 SYSTEM_PROMPT_UZ = """
 Siz "Hijama Centre" kompaniyasining rasmiy sun'iy intellekt operatorisiz. Biz barcha kasalliklarni tabiiy usullar bilan davolashga ixtisoslashganmiz.
 Mijozlarga har doim muloyim, hurmatli, tushunarli va foydali tarzda javob bering. Siz sotuv botisiz, shuning uchun har bir gapingiz odamni qiziqtiradigan va klientni ushlab qoladigan bo'lishi kerak.
+Foydalanuvchining xabar tilini avtomatik aniqlang va o'sha tilda javob bering. Agar o'zbek tilida Kirill alifbosida yozilgan bo'lsa, Kirill alifbosida javob qaytaring.
 
 **Javob berish qoidalari:**
 1.  Faqat bizning xizmatlarimiz, kurslarimiz, manzilimiz va aloqa ma'lumotlarimiz haqida qisqa va aniq ma'lumot bering.
@@ -103,6 +99,7 @@ Foydalanuvchi qanday savol bermasin, yuqoridagi ma'lumotlarga asoslanib, ularga 
 SYSTEM_PROMPT_RU = """
 Вы официальный оператор искусственного интеллекта компании "Hijama Centre". Мы специализируемся на лечении всех заболеваний природными методами.
 Всегда отвечайте клиентам вежливо, уважительно, понятно и полезно. Вы бот по продажам, поэтому каждое ваше слово должно вызывать интерес и удерживать клиента.
+Автоматически определяйте язык сообщения пользователя и отвечайте на том же языке. Если сообщение на узбекском языке написано кириллицей, отвечайте кириллицей.
 
 **Правила ответа:**
 1.  Говорите только о наших услугах, курсах, адресе и контактной информации, кратко и четко.
@@ -110,8 +107,7 @@ SYSTEM_PROMPT_RU = """
 3.  **Не предоставляйте никакой информации из интернета.** Вся информация должна быть только из этого промпта.
 4.  **Не давайте медицинских советов о болезнях, их симптомах или методах лечения.** Предоставляйте только общую информацию об услугах и курсах, предоставляемых в нашем центре.
 5.  Не отвлекайтесь на другие темы. Если задают другие вопросы, вежливо попросите номер телефона и сообщите, что наши операторы свяжутся с ним в ближайшее время. Будьте вежливы в каждом слове.
-6.  Если пользователь пишет "Assalamu alaykum", в первый раз ответьте: "Va alaykum assalam! Добро пожаловать! Чем могу помочь?". На последующие "Assalamu alaykum" отвечайте только "Чем могу помочь?" или аналогичным кратким ответом. (Это правило также должно быть поддержано в коде позже).
-7.  **Отвечайте только на вопросы. Не добавляйте "Да" или подобные утвердительные или лишние слова от себя. Предоставляйте только запрошенную информацию.**
+6.  **Отвечайте только на вопросы. Не добавляйте "Да" или подобные утвердительные или лишние слова от себя. Предоставляйте только запрошенную информацию.**
 
 Наши основные услуги:
 -   **Хиджама (кровопускание):** Древний природный метод очищения организма и лечения различных заболеваний. В исламе считается сунной.
@@ -143,6 +139,7 @@ SYSTEM_PROMPT_RU = """
 SYSTEM_PROMPT_EN = """
 You are the official artificial intelligence operator of "Hijama Centre". We specialize in treating all diseases with natural methods.
 Always respond to clients politely, respectfully, clearly, and helpfully. You are a sales bot, so every word you say should attract interest and retain the client.
+Automatically detect the language of the user's message and respond in that same language. If the message is in Uzbek using the Cyrillic alphabet, respond in Cyrillic.
 
 **Response Rules:**
 1.  Only talk about our services, courses, address, and contact information, briefly and clearly.
@@ -150,8 +147,7 @@ Always respond to clients politely, respectfully, clearly, and helpfully. You ar
 3.  **Do not provide any information from the internet.** All information must be only from this prompt.
 4.  **Do not give medical advice about diseases, their symptoms, or treatment methods.** Provide only general information about the services and courses offered at our center.
 5.  Do not get distracted by other topics. If other questions are asked, politely ask for a phone number and inform them that our operators will contact them shortly. Be polite in every word.
-6.  If the user types "Assalamu alaykum", for the first time reply: "Va alaykum assalam! Welcome! How can I help you?". For subsequent "Assalamu alaykum" messages, reply only "How can I help you?" or a similar brief response. (This rule should also be supported in the code later).
-7.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information.**
+6.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information.**
 
 Our main services:
 -   **Hijama (cupping therapy):** An ancient natural method of body cleansing and treating various diseases. It is considered a Sunnah act in Islam.
@@ -239,25 +235,10 @@ def webhook():
                         reply = "Raqamingiz qabul qilindi. Tez orada siz bilan bog'lanamiz. E'tiboringiz uchun rahmat!"
                         send_message(sender_id, reply)
                     else:
-                        # Tilni aniqlash va mos promptni tanlash
-                        detected_lang = "uz" # Default o'zbek tili
-                        try:
-                            detected_lang = detect(user_msg)
-                            logging.info(f"🗣️ Aniqlangan til: {detected_lang}")
-                        except Exception as e:
-                            logging.warning(f"⚠️ Tilni aniqlashda xato: {e}. O'zbek tili default qilib olinadi.")
-
-                        system_prompt_to_use = SYSTEM_PROMPT_UZ
-                        if detected_lang == 'ru':
-                            system_prompt_to_use = SYSTEM_PROMPT_RU
-                        elif detected_lang == 'en':
-                            system_prompt_to_use = SYSTEM_PROMPT_EN
-                        
-                        # YANGI: "Assalamu alaykum" ga bir marta javob berish mantig'i
+                        # "Assalamu alaykum" ga bir marta javob berish mantig'i
                         current_time = time.time()
                         # Agar xabar "Assalamu alaykum" yoki shunga o'xshash bo'lsa
                         if "assalamu alaykum" in user_msg.lower() or "salom" in user_msg.lower():
-                            # Agar foydalanuvchi oxirgi 24 soat ichida salomlashmagan bo'lsa
                             if sender_id not in user_last_greeting_time or \
                                (current_time - user_last_greeting_time[sender_id]) > 24 * 3600: # 24 soat = 86400 soniya
                                 reply = "Va alaykum assalam! Xush kelibsiz! Qanday yordam bera olaman?"
@@ -265,17 +246,17 @@ def webhook():
                                 send_message(sender_id, reply)
                                 return "ok", 200 # Javob berildi, boshqa ishlamaymiz
                             else:
-                                # Agar allaqachon salomlashgan bo'lsa, faqat "Qanday yordam bera olaman?"
                                 reply = "Qanday yordam bera olaman?"
                                 send_message(sender_id, reply)
                                 return "ok", 200 # Javob berildi, boshqa ishlamaymiz
                         
                         # Asosiy Gemini javobi
                         if model: # Проверяем, что модель Gemini инициализирована
-                            reply = ask_gemini(user_msg, system_prompt_to_use, detected_lang)
+                            # Gemini'ga faqat bitta prompt yuboramiz, u tilni o'zi aniqlaydi
+                            reply = ask_gemini(user_msg, SYSTEM_PROMPT_UZ) # Faqat o'zbekcha promptni yuboramiz
                             logging.info(f"🤖 Gemini javobi: {reply}")
                         else:
-                            reply = "Kechirasiz, AI xizmati hozircha mavjud emas. Iltimos, keyinroq urinib ko'ring."
+                            reply = "Kechirasiz, AI xizmati hozircha mavjud emas. Iltimos, qayta urinib ko'ring."
                             logging.error("❌ Gemini modeli ishga tushirilmagan. Javob berish imkonsiz.")
 
                         send_message(sender_id, reply)
@@ -289,29 +270,15 @@ def webhook():
     return "ok", 200
 
 # Генерация ответа от Gemini
-def ask_gemini(question, system_prompt, detected_lang):
+def ask_gemini(question, system_prompt): # detected_lang parametri olib tashlandi
     if not model:
         logging.error("❌ Gemini modeli ishga tushirilmagan. Javob berish imkonsiz.")
         return "Kechirasiz, AI xizmati hozirda ishlamayapti."
     try:
-        # Agar til o'zbek bo'lsa va kirill yozuvida bo'lsa, uni lotinga o'girib, keyin javobni kirillga qaytaramiz
-        original_question = question
-        # Kirill-Lotin o'girish mantig'i:
-        # Hozirda `googletrans` Kirill o'zbek tilidan Lotin o'zbek tiliga to'g'ridan-to'g'ri o'girmaydi.
-        # Agar sizga bu funksiya juda muhim bo'lsa, alohida kutubxona (masalan, `uzwords`) o'rnatish kerak.
-        # Hozirgi holatda, agar Kirill o'zbekcha bo'lsa, Gemini'ga o'zbekcha prompt bilan yuboriladi va javob ham o'zbekcha bo'ladi.
-        # Kirill va Lotin o'rtasida aniq o'girish uchun qo'shimcha kod talab qilinadi.
-        
+        # Gemini'ga tilni aniqlash va o'sha tilda javob berishni prompt orqali yuklaymiz.
+        # Kirill-Lotin o'girish mantig'i olib tashlandi.
         response = model.generate_content(system_prompt + f"\nSavol: {question}\nJavob:")
         reply_text = response.text.strip()
-
-        # Agar foydalanuvchi kirill o'zbek tilida yozgan bo'lsa, javobni ham kirillga qaytarish
-        # Bu qism ham yuqoridagi kabi, to'g'ri o'giruvchi kutubxona bo'lmasa to'liq ishlamaydi.
-        # Agar `uz_latin_to_cyrillic` funksiyangiz bo'lsa:
-        # if detected_lang == 'uz' and re.search(r'[А-Яа-яЁё]', original_question):
-        #     logging.info("⬅️ Javobni kirill o'zbek tiliga o'girilmoqda.")
-        #     reply_text = uz_latin_to_cyrillic(reply_text)
-
         return reply_text
     except Exception as e:
         logging.error(f"❌ Gemini javobini yaratishda xato: {e}", exc_info=True) # Добавляем exc_info=True для полного traceback
