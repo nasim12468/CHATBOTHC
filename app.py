@@ -4,6 +4,9 @@ import os
 import google.generativeai as genai
 import logging
 import re # Regular expressions for phone number detection
+from langdetect import detect # Tilni aniqlash uchun yangi import
+from googletrans import Translator # Tarjima qilish uchun yangi import
+import time # Vaqtni eslab qolish uchun
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -47,29 +50,38 @@ try:
 except Exception as e:
     logging.error(f"❌ Gemini API'ni ishga tushirishda xato: {e}", exc_info=True) # Добавляем exc_info для полного traceback
 
+# Tilni aniqlash va tarjima qilish uchun Translator obyektini yaratish
+translator = Translator()
+
+# YANGI: Qayta ishlangan xabar ID'larini saqlash uchun set
+processed_message_ids = set()
+# YANGI: Foydalanuvchilarning oxirgi salomlashish vaqtini saqlash uchun lug'at
+user_last_greeting_time = {}
+
+
 # Системный промпт
 # ОБНОВЛЕНО: Полный и подробный системный промпт на узбекском языке с учетом новых требований
-SYSTEM_PROMPT = """
+SYSTEM_PROMPT_UZ = """
 Siz "Hijama Centre" kompaniyasining rasmiy sun'iy intellekt operatorisiz. Biz barcha kasalliklarni tabiiy usullar bilan davolashga ixtisoslashganmiz.
-Mijozlarga har doim muloyim, hurmatli, tushunarli va foydali tarzda javob bering. Faqat o'zbek tilida yozing. Agar kiril o'zbek tilida yozsa kirilcha javob qaytaring! 
-Agar siz bilan boshqa tilda ingliz yoki rus tilida muloqot qilsa to'liq tarzda siz ham o'sha tilda muloqot qiling!
+Mijozlarga har doim muloyim, hurmatli, tushunarli va foydali tarzda javob bering. Siz sotuv botisiz, shuning uchun har bir gapingiz odamni qiziqtiradigan va klientni ushlab qoladigan bo'lishi kerak.
 
 **Javob berish qoidalari:**
-1.  Faqat bizning xizmatlarimiz, manzilimiz va aloqa ma'lumotlarimiz haqida gapiring.
-2.  **Narxlar yoki batafsil ma'lumot haqida savol berilsa, to'g'ridan-to'g'ri javob bermang.** Buning o'rniga, "Narxlar va batafsil ma'lumot olish uchun iltimos, biz bilan telefon orqali bog'laning" yoki "Narxlar xizmat turiga qarab farq qiladi. Batafsil ma'lumot uchun bizga qo'ng'iroq qiling" deb javob bering. Yoki "Batafsil ma'lumot olish uchun telefon raqamingizni yozib qoldiring, biz siz bilan bog'lanamiz" deb ayting.
+1.  Faqat bizning xizmatlarimiz, kurslarimiz, manzilimiz va aloqa ma'lumotlarimiz haqida qisqa va aniq ma'lumot bering.
+2.  **Narxlar yoki batafsil ma'lumot haqida savol berilsa, to'g'ridan-to'g'ri javob bermang.** Buning o'rniga, "Narxlar va batafsil ma'lumot olish uchun iltimos, biz bilan telefon orqali bog'laning" yoki "Batafsil ma'lumot olish uchun telefon raqamingizni yozib qoldiring, biz siz bilan bog'lanamiz" deb javob bering.
 3.  **Internetdan hech qanday ma'lumot bermang.** Barcha ma'lumotlar faqat shu promptda keltirilgan bo'lishi kerak.
-4.  **Kasalliklar, ularning belgilari yoki davolash usullari haqida tibbiy maslahat bermang.** Faqat bizning markazimizda ko'rsatiladigan xizmatlar haqida umumiy ma'lumot bering.
-5.  Barcha ma'lumotlar faqat ishga va markazga oid bo'lishi kerak. Boshqa mavzularga chalg'imang. Agar boshqa savollar berilsa telefon raqamini so'rang va unga yaqin orada operatorlarimiz u bilan bog'lanishini aytib qo'ying xushmuomila bo'ling har bir gapingizfa
-6.  Agar foydalanuvchi "Assalamu alaykum" deb yozsa, birinchi marta "Va alaykum assalam! Xush kelibsiz! Qanday yordam bera olaman?" deb javob bering. Keyingi "Assalamu alaykum"larga esa faqat "Qanday yordam bera olaman?" yoki shunga o'xshash qisqa javob bering. (Bu qoida keyinchalik kodda ham qo'llab-quvvatlanishi kerak).
+4.  **Kasalliklar, ularning belgilari yoki davolash usullari haqida tibbiy maslahat bermang.** Faqat bizning markazimizda ko'rsatiladigan xizmatlar va kurslar haqida umumiy ma'lumot bering.
+5.  Boshqa mavzularga chalg'imang. Agar boshqa savollar berilsa, muloyimlik bilan telefon raqamini so'rang va unga yaqin orada operatorlarimiz u bilan bog'lanishini aytib qo'ying.
+6.  **Faqat savollarga javob bering. O'zingizdan "Ha" yoki shunga o'xshash tasdiqlovchi yoki ortiqcha gaplarni qo'shmang. Faqat so'ralgan ma'lumotni bering.**
 
 Bizning asosiy xizmatlarimiz:
--   **Hijoma (qon oldirish):** Tanani tozalash va turli kasalliklarni davolashning qadimiy tabiiy usuli. Islom dinida suunnat amal xisoblanadi
+-   **Hijoma (qon oldirish):** Tanani tozalash va turli kasalliklarni davolashning qadimiy tabiiy usuli. Islom dinida sunnat amal hisoblanadi.
 -   **Massaj:** Turli xil massaj turlari (davolovchi, tinchlantiruvchi, sport massaji) mushaklardagi og'riqlarni yengillashtirish va qon aylanishini yaxshilash uchun.
 -   **Girodoterapiya (zuluk bilan davolash):** Qon bosimini normallashtirish, qonni suyultirish va yallig'lanishni kamaytirish uchun tibbiy zuluklardan foydalanish.
--   **Boshqa tabiiy usullar:** Har bir mijozning individual ehtiyojlariga moslashtirilgan boshqa tabiiy davolash usullari.
 -   **Manual terapiya:** Bu qo‘l bilan davolash usuli bo‘lib, tananing og‘riqli joylariga yoki suyak, mushak, bo‘g‘imlarga mutaxassisning qo‘llari orqali bevosita ta’sir ko‘rsatishdir.
+-   **Kosmetologiya:** Tabiiy mahsulotlar va usullar yordamida yuz va tana terisini parvarish qilish.
+-   **Boshqa tabiiy usullar:** Har bir mijozning individual ehtiyojlariga moslashtirilgan boshqa tabiiy davolash usullari.
 
-Biz nafaqat xizmat ko'rsatamiz, yana shu xizmatlarga odamlarni ham o'qitamiz, kurslarimiz bor
+Biz nafaqat xizmat ko'rsatamiz, yana shu xizmatlarga odamlarni ham o'qitamiz, kurslarimiz bor.
 Bizning o'quv kurslarimiz:
 -   **Hamshiralik kursi:** 3 oy davomida.
 -   **Massaj kursi:** 2 oy davomida.
@@ -84,8 +96,87 @@ Biz bilan bog'lanish:
 -   **Telefon:** +998 90 988 03 03
 -   **Telegram:** @hijamacentre1
 
-Foydalanuvchi qanday savol bermasin, yuqoridagi ma'lumotlarga asoslanib, ularga yordam bering. Agar savol tushunarli bo'lmasa, hurmat bilan aniqlashtiruvchi savol bering. Hamma gaplaringiz odamni qiziqtiradigan va xarakat qilib klientni ushlab qoladigan bo'lishi kerak chunki siz sotuv botisiz operator
-Agar ingliz tilida savol kelsa ingliz tilida javob ber agar rus tilida savol kelsa ruscha javob ber
+Foydalanuvchi qanday savol bermasin, yuqoridagi ma'lumotlarga asoslanib, ularga yordam bering. Agar savol tushunarli bo'lmasa, hurmat bilan aniqlashtiruvchi savol bering.
+"""
+
+# Ruscha prompt
+SYSTEM_PROMPT_RU = """
+Вы официальный оператор искусственного интеллекта компании "Hijama Centre". Мы специализируемся на лечении всех заболеваний природными методами.
+Всегда отвечайте клиентам вежливо, уважительно, понятно и полезно. Вы бот по продажам, поэтому каждое ваше слово должно вызывать интерес и удерживать клиента.
+
+**Правила ответа:**
+1.  Говорите только о наших услугах, курсах, адресе и контактной информации, кратко и четко.
+2.  **Если задают вопрос о ценах или подробной информации, не отвечайте напрямую.** Вместо этого ответьте: "Для получения подробной информации о ценах, пожалуйста, свяжитесь с нами по телефону" или "Для получения подробной информации, оставьте свой номер телефона, и мы свяжемся с вами в ближайшее время".
+3.  **Не предоставляйте никакой информации из интернета.** Вся информация должна быть только из этого промпта.
+4.  **Не давайте медицинских советов о болезнях, их симптомах или методах лечения.** Предоставляйте только общую информацию об услугах и курсах, предоставляемых в нашем центре.
+5.  Не отвлекайтесь на другие темы. Если задают другие вопросы, вежливо попросите номер телефона и сообщите, что наши операторы свяжутся с ним в ближайшее время. Будьте вежливы в каждом слове.
+6.  Если пользователь пишет "Assalamu alaykum", в первый раз ответьте: "Va alaykum assalam! Добро пожаловать! Чем могу помочь?". На последующие "Assalamu alaykum" отвечайте только "Чем могу помочь?" или аналогичным кратким ответом. (Это правило также должно быть поддержано в коде позже).
+7.  **Отвечайте только на вопросы. Не добавляйте "Да" или подобные утвердительные или лишние слова от себя. Предоставляйте только запрошенную информацию.**
+
+Наши основные услуги:
+-   **Хиджама (кровопускание):** Древний природный метод очищения организма и лечения различных заболеваний. В исламе считается сунной.
+-   **Массаж:** Различные виды массажа (лечебный, расслабляющий, спортивный массаж) для облегчения мышечных болей и улучшения кровообращения.
+-   **Гирудотерапия (лечение пиявками):** Использование медицинских пиявок для нормализации артериального давления, разжижения крови и уменьшения воспаления.
+-   **Мануальная терапия:** Это метод лечения руками, при котором специалист непосредственно воздействует на болезненные участки тела или на кости, мышцы, суставы с помощью своих рук.
+-   **Косметология:** Уход за кожей лица и тела с использованием натуральных продуктов и методов.
+-   **Другие природные методы:** Другие природные методы лечения, адаптированные к индивидуальным потребностям каждого клиента.
+
+Мы не только предоставляем услуги, но и обучаем людей этим услугам, у нас есть курсы.
+Наши учебные курсы:
+-   **Курс медсестер:** Продолжительность 3 месяца.
+-   **Курс массажа:** Продолжительность 2 месяца.
+-   **Курс хиджамы:** Продолжительность 1 месяц.
+-   **Курс гирудотерапии (пиявки):** Продолжительность 15 дней.
+По окончании курса участникам выдается **Египетский сертификат**.
+
+Наш адрес:
+-   **Адрес:** Город Ташкент, Шайхантахурский район, Самарканд Дарвоза, 149А.
+
+Связаться с нами:
+-   **Телефон:** +998 90 988 03 03
+-   **Telegram:** @hijamacentre1
+
+Независимо от вопроса пользователя, отвечайте, основываясь на приведенной выше информации. Если вопрос непонятен, вежливо задайте уточняющий вопрос.
+"""
+
+# Inglizcha prompt
+SYSTEM_PROMPT_EN = """
+You are the official artificial intelligence operator of "Hijama Centre". We specialize in treating all diseases with natural methods.
+Always respond to clients politely, respectfully, clearly, and helpfully. You are a sales bot, so every word you say should attract interest and retain the client.
+
+**Response Rules:**
+1.  Only talk about our services, courses, address, and contact information, briefly and clearly.
+2.  **If asked about prices or detailed information, do not answer directly.** Instead, reply: "To get detailed information about prices, please contact us by phone" or "To get detailed information, leave your phone number, and we will contact you shortly."
+3.  **Do not provide any information from the internet.** All information must be only from this prompt.
+4.  **Do not give medical advice about diseases, their symptoms, or treatment methods.** Provide only general information about the services and courses offered at our center.
+5.  Do not get distracted by other topics. If other questions are asked, politely ask for a phone number and inform them that our operators will contact them shortly. Be polite in every word.
+6.  If the user types "Assalamu alaykum", for the first time reply: "Va alaykum assalam! Welcome! How can I help you?". For subsequent "Assalamu alaykum" messages, reply only "How can I help you?" or a similar brief response. (This rule should also be supported in the code later).
+7.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information.**
+
+Our main services:
+-   **Hijama (cupping therapy):** An ancient natural method of body cleansing and treating various diseases. It is considered a Sunnah act in Islam.
+-   **Massage:** Various types of massage (therapeutic, relaxing, sports massage) to relieve muscle pain and improve blood circulation.
+-   **Hirudotherapy (leech therapy):** The use of medicinal leeches to normalize blood pressure, thin blood, and reduce inflammation.
+-   **Manual therapy:** This is a hands-on treatment method where a specialist directly affects painful areas of the body or bones, muscles, joints with their hands.
+-   **Cosmetology:** Face and body skin care using natural products and methods.
+-   **Other natural methods:** Other natural treatment methods tailored to the individual needs of each client.
+
+We not only provide services, but also train people in these services; we have courses.
+Our training courses:
+-   **Nursing Course:** Duration 3 months.
+-   **Massage Course:** Duration 2 months.
+-   **Hijama Course:** Duration 1 month.
+-   **Hirudotherapy (Leech) Course:** Duration 15 days.
+Upon completion of the course, participants receive an **Egyptian Certificate**.
+
+Our address:
+-   **Address:** Tashkent city, Shaykhontokhur district, Samarqand Darvoza, 149A.
+
+Contact us:
+-   **Phone:** +998 90 988 03 03
+-   **Telegram:** @hijamacentre1
+
+Regardless of the user's question, respond based on the information provided above. If the question is unclear, politely ask a clarifying question.
 """
 
 
@@ -122,6 +213,18 @@ def webhook():
     if data.get("object") == "instagram":
         for entry in data.get("entry", []):
             for messaging_event in entry.get("messaging", []):
+                # YANGI: Xabar ID'sini olish
+                message_id = messaging_event.get("message", {}).get("mid")
+                if message_id and message_id in processed_message_ids:
+                    logging.info(f"♻️ Xabar {message_id} allaqachon qayta ishlangan. O'tkazib yuborilmoqda.")
+                    return "ok", 200 # Agar allaqachon qayta ishlangan bo'lsa, tezda "ok" qaytaramiz
+
+                # Xabar ID'sini qayta ishlanganlar ro'yxatiga qo'shamiz
+                if message_id:
+                    processed_message_ids.add(message_id)
+                    # Ro'yxatni juda katta bo'lib ketmasligi uchun vaqti-vaqti bilan tozalash mumkin
+                    # Masalan, har 1000 ta xabardan keyin yoki har bir soatda
+
                 sender_id = messaging_event["sender"]["id"]
                 if "message" in messaging_event and "text" in messaging_event["message"]:
                     user_msg = messaging_event["message"]["text"]
@@ -136,9 +239,40 @@ def webhook():
                         reply = "Raqamingiz qabul qilindi. Tez orada siz bilan bog'lanamiz. E'tiboringiz uchun rahmat!"
                         send_message(sender_id, reply)
                     else:
-                        # Agar telefon raqami topilmasa, Gemini orqali javob beramiz
+                        # Tilni aniqlash va mos promptni tanlash
+                        detected_lang = "uz" # Default o'zbek tili
+                        try:
+                            detected_lang = detect(user_msg)
+                            logging.info(f"🗣️ Aniqlangan til: {detected_lang}")
+                        except Exception as e:
+                            logging.warning(f"⚠️ Tilni aniqlashda xato: {e}. O'zbek tili default qilib olinadi.")
+
+                        system_prompt_to_use = SYSTEM_PROMPT_UZ
+                        if detected_lang == 'ru':
+                            system_prompt_to_use = SYSTEM_PROMPT_RU
+                        elif detected_lang == 'en':
+                            system_prompt_to_use = SYSTEM_PROMPT_EN
+                        
+                        # YANGI: "Assalamu alaykum" ga bir marta javob berish mantig'i
+                        current_time = time.time()
+                        # Agar xabar "Assalamu alaykum" yoki shunga o'xshash bo'lsa
+                        if "assalamu alaykum" in user_msg.lower() or "salom" in user_msg.lower():
+                            # Agar foydalanuvchi oxirgi 24 soat ichida salomlashmagan bo'lsa
+                            if sender_id not in user_last_greeting_time or \
+                               (current_time - user_last_greeting_time[sender_id]) > 24 * 3600: # 24 soat = 86400 soniya
+                                reply = "Va alaykum assalam! Xush kelibsiz! Qanday yordam bera olaman?"
+                                user_last_greeting_time[sender_id] = current_time # Vaqtni yangilash
+                                send_message(sender_id, reply)
+                                return "ok", 200 # Javob berildi, boshqa ishlamaymiz
+                            else:
+                                # Agar allaqachon salomlashgan bo'lsa, faqat "Qanday yordam bera olaman?"
+                                reply = "Qanday yordam bera olaman?"
+                                send_message(sender_id, reply)
+                                return "ok", 200 # Javob berildi, boshqa ishlamaymiz
+                        
+                        # Asosiy Gemini javobi
                         if model: # Проверяем, что модель Gemini инициализирована
-                            reply = ask_gemini(user_msg)
+                            reply = ask_gemini(user_msg, system_prompt_to_use, detected_lang)
                             logging.info(f"🤖 Gemini javobi: {reply}")
                         else:
                             reply = "Kechirasiz, AI xizmati hozircha mavjud emas. Iltimos, keyinroq urinib ko'ring."
@@ -155,14 +289,30 @@ def webhook():
     return "ok", 200
 
 # Генерация ответа от Gemini
-def ask_gemini(question):
+def ask_gemini(question, system_prompt, detected_lang):
     if not model:
         logging.error("❌ Gemini modeli ishga tushirilmagan. Javob berish imkonsiz.")
         return "Kechirasiz, AI xizmati hozirda ishlamayapti."
     try:
-        # Используем SYSTEM_PROMPT как часть запроса, это более типично для Gemini API
-        response = model.generate_content(SYSTEM_PROMPT + f"\nSavol: {question}\nJavob:")
-        return response.text.strip()
+        # Agar til o'zbek bo'lsa va kirill yozuvida bo'lsa, uni lotinga o'girib, keyin javobni kirillga qaytaramiz
+        original_question = question
+        # Kirill-Lotin o'girish mantig'i:
+        # Hozirda `googletrans` Kirill o'zbek tilidan Lotin o'zbek tiliga to'g'ridan-to'g'ri o'girmaydi.
+        # Agar sizga bu funksiya juda muhim bo'lsa, alohida kutubxona (masalan, `uzwords`) o'rnatish kerak.
+        # Hozirgi holatda, agar Kirill o'zbekcha bo'lsa, Gemini'ga o'zbekcha prompt bilan yuboriladi va javob ham o'zbekcha bo'ladi.
+        # Kirill va Lotin o'rtasida aniq o'girish uchun qo'shimcha kod talab qilinadi.
+        
+        response = model.generate_content(system_prompt + f"\nSavol: {question}\nJavob:")
+        reply_text = response.text.strip()
+
+        # Agar foydalanuvchi kirill o'zbek tilida yozgan bo'lsa, javobni ham kirillga qaytarish
+        # Bu qism ham yuqoridagi kabi, to'g'ri o'giruvchi kutubxona bo'lmasa to'liq ishlamaydi.
+        # Agar `uz_latin_to_cyrillic` funksiyangiz bo'lsa:
+        # if detected_lang == 'uz' and re.search(r'[А-Яа-яЁё]', original_question):
+        #     logging.info("⬅️ Javobni kirill o'zbek tiliga o'girilmoqda.")
+        #     reply_text = uz_latin_to_cyrillic(reply_text)
+
+        return reply_text
     except Exception as e:
         logging.error(f"❌ Gemini javobini yaratishda xato: {e}", exc_info=True) # Добавляем exc_info=True для полного traceback
         return "Kechirasiz, xatolik yuz berdi. Iltimos, qayta urinib ko'ring."
@@ -190,7 +340,7 @@ def send_message(recipient_id, message_text):
         if r is not None:
             logging.error(f"❌ Meta javobi (xato): {r.status_code} - {r.text}")
     except Exception as e:
-        logging.error(f"❌ Xabar yuborishda noma'lum xatolik: {e}", exc_info=True)
+        logging.error(f"❌ Xabar yuborishda noma'lum xato: {e}", exc_info=True)
 
 # YANGI: Telefon raqamini Telegram botga yuborish funksiyasi
 def send_to_telegram_bot(instagram_sender_id, phone_number, original_message):
