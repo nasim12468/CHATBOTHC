@@ -337,10 +337,9 @@ def send_to_telegram_bot(instagram_sender_id, phone_number, original_message):
 
     telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     text_message = (
-        f"Yangi telefon raqami qabul qilindi!\n"
+        f"✅ Yangi telefon raqami qabul qilindi!\n"
         f"Instagram foydalanuvchisi ID: {instagram_sender_id}\n"
         f"Telefon raqami: {phone_number}\n"
-        f"Asl xabar: {original_message}"
     )
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
