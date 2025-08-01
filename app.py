@@ -235,23 +235,30 @@ def webhook():
                         phone_number = found_phone_numbers[0]
                         logging.info(f"📞 Telefon raqami aniqlandi: {phone_number}")
                         send_to_telegram_bot(sender_id, phone_number, user_msg)
-                        reply = "Raqamingiz qabul qilindi. Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat!"
+                        # O'zgartirilgan, muloyim va emoji qo'shilgan javob
+                        reply = "Ajoyib! Telefon raqamingizni qabul qildik. ✅ Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat! 😊"
                         send_message(sender_id, reply)
                     else:
                         current_time = time.time()
                         
-                        # NEW: Check for thank you message first
+                        # "Yaxshimisiz?" savoliga muloyim javob berish
+                        if "yaxshimisiz" in user_msg_lower or "qaleysiz" in user_msg_lower:
+                            reply = "Rahmat, yaxshi! 😊 Sizga qanday yordam bera olaman?"
+                            send_message(sender_id, reply)
+                            return "ok", 200
+                        
+                        # "Rahmat" uchun javob berish
                         if "rahmat" in user_msg_lower or "raxmat" in user_msg_lower or "tashakkur" in user_msg_lower:
-                            send_message(sender_id, "Sog' bo'ling!")
+                            send_message(sender_id, "Sog' bo'ling! 😊")
                             return "ok", 200
                         elif "thank you" in user_msg_lower or "thanks" in user_msg_lower:
-                            send_message(sender_id, "You're welcome!")
+                            send_message(sender_id, "You're welcome! 😊")
                             return "ok", 200
                         
                         if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower or "hello" in user_msg_lower:
                             if sender_id not in user_last_greeting_time or \
                                (current_time - user_last_greeting_time[sender_id]) > 24 * 3600:
-                                reply = "Va alaykum assalam! Xush kelibsiz! Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "Hello! Welcome! How can I help you?"
+                                reply = "Va alaykum assalam! Xush kelibsiz! 👋 Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "Hello! Welcome! 👋 How can I help you?"
                                 user_last_greeting_time[sender_id] = current_time
                                 send_message(sender_id, reply)
                                 return "ok", 200
@@ -351,7 +358,7 @@ def send_to_telegram_bot(instagram_sender_id, phone_number, original_message):
 
     telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     text_message = (
-        f"⚠️ Yangi telefon raqami qabul qilindi!\n"
+        f"Yangi telefon raqami qabul qilindi!\n"
         f"Instagram foydalanuvchisi ID: {instagram_sender_id}\n"
         f"Telefon raqami: {phone_number}\n"
         f"Asl xabar: {original_message}"
