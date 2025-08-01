@@ -106,33 +106,33 @@ def add_initial_faqs():
     initial_faqs_data = [
         {
             "question_keywords": ["xizmatlar", "qanday xizmatlar", "nima qilasiz", "xizmat turlari", "services", "what services", "what do you do"],
-            "answer_text_uz": "Bizning asosiy xizmatlarimiz: Hijoma, Massaj, Girodoterapiya (zuluk bilan davolash), Manual terapiya va Kosmetologiya. Batafsil ma'lumot uchun biz bilan bog'laning.",
-            "answer_text_en": "Our main services include: Hijama, Massage, Hirudotherapy (leech therapy), Manual Therapy, and Cosmetology. Please contact us for more details."
+            "answer_text_uz": "Biz \"Hijama Centre\" klinikasida sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. ✅ Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya (zuluk bilan davolash) va Kosmetologiya. \n\nSizni qiziqtirgan xizmat turi bo'yicha batafsil ma'lumot olish uchun operatorlarimiz bilan bog'laning.",
+            "answer_text_en": "At \"Hijama Centre,\" we offer a wide range of natural treatments for your health and beauty. ✅ Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy (leech therapy), and Cosmetology. \n\nFor more detailed information about a specific service, please contact our operators."
         },
         {
             "question_keywords": ["kurslar", "o'qimoqchiman", "o'qish", "o'rgatish", "o'rgating", "kurs", "courses", "study", "learn", "teach"],
-            "answer_text_uz": "Bizda Hamshiralik (3 oy), Massaj (2 oy), Hijoma (1 oy), Girodoterapiya (15 kun) kurslari mavjud. Kurs yakunida Misr sertifikati beriladi. Narxlar va batafsil ma'lumot uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz.",
-            "answer_text_en": "We offer Nursing (3 months), Massage (2 months), Hijama (1 month), and Hirudotherapy (15 days) courses. An Egyptian Certificate is provided upon completion. For prices and details, please leave your phone number, and we will contact you."
+            "answer_text_uz": "Ajoyib! Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud. 🎓\n\n- **Hamshiralik:** 3 oy\n- **Massaj:** 2 oy\n- **Hijoma:** 1 oy\n- **Girodoterapiya:** 15 kun\n\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Kurs narxlari va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz.",
+            "answer_text_en": "That's great! We have specialized courses for those who want to build a career in natural medicine. 🎓\n\n- **Nursing:** 3 months\n- **Massage:** 2 months\n- **Hijoma:** 1 month\n- **Hirudotherapy:** 15 days\n\nUpon successful completion, you will receive an Egyptian Certificate. For course prices and other details, please leave your phone number, and we will contact you."
         },
         {
             "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where are you"],
-            "answer_text_uz": "Bizning manzilimiz: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A.",
-            "answer_text_en": "Our address is: Tashkent city, Shaykhontokhur district, Samarqand Darvoza, 149A."
+            "answer_text_uz": "📍 Bizning markazimiz qulay joylashgan. Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A. Sizni kutamiz! 😊",
+            "answer_text_en": "📍 Our center is conveniently located at: Tashkent city, Shaykhontokhur district, Samarqand Darvoza, 149A. We look forward to seeing you! 😊"
         },
         {
             "question_keywords": ["telefon", "raqam", "aloqa", "bog'lanish", "phone", "number", "contact"],
-            "answer_text_uz": "Biz bilan bog'lanish uchun telefon raqami: +998 90 988 03 03. Telegram orqali ham @hijamacentre1 manziliga yozishingiz mumkin.",
-            "answer_text_en": "Our contact phone number is: +998 90 988 03 03. You can also reach us on Telegram at @hijamacentre1."
+            "answer_text_uz": "📞 Biz bilan bog'lanish uchun telefon raqami: **+998 90 988 03 03**. Shuningdek, Telegram orqali ham @hijamacentre1 manziliga yozishingiz mumkin. Savollaringizga javob berishdan mamnun bo'lamiz!",
+            "answer_text_en": "📞 You can reach us by phone at: **+998 90 988 03 03**. You can also write to us on Telegram at @hijamacentre1. We would be happy to answer your questions!"
         },
         {
             "question_keywords": ["narx", "qancha turadi", "pul", "to'lov", "batafsil ma'lumot", "price", "cost", "how much", "payment", "detailed information"],
-            "answer_text_uz": "Narxlar xizmat turiga qarab farq qiladi. Batafsil ma'lumot olish uchun iltimos, biz bilan telefon orqali bog'laning yoki telefon raqamingizni yozib qoldiring, biz siz bilan bog'lanamiz.",
-            "answer_text_en": "Prices vary depending on the service. For detailed information, please contact us by phone or leave your phone number, and we will contact you."
+            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. 😊",
+            "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. 💰 To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions. 😊"
         },
         {
             "question_keywords": ["bog'lanmadilar", "qo'ng'iroq qilmadingiz", "bog'lanmadingiz", "no one called", "didn't call", "you didn't contact"],
-            "answer_text_uz": "Siz bilan bog'lanamiz, noqulayliklar uchun uzr.",
-            "answer_text_en": "We apologize for the inconvenience and will contact you shortly."
+            "answer_text_uz": "Uzr, biz siz bilan tez orada bog'lanamiz. Noqulayliklar uchun uzr so'raymiz. 🙏",
+            "answer_text_en": "We apologize for the inconvenience. 🙏 We will contact you shortly to assist you."
         }
     ]
 
@@ -252,7 +252,7 @@ def webhook():
                             send_message(sender_id, "Sog' bo'ling! 😊")
                             return "ok", 200
                         elif "thank you" in user_msg_lower or "thanks" in user_msg_lower:
-                            send_message(sender_id, "You're welcome! 😊")
+                            send_message(sender_id, "You're welcome! �")
                             return "ok", 200
                         
                         if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower or "hello" in user_msg_lower:
@@ -343,10 +343,19 @@ def send_message(recipient_id, message_text):
         r.raise_for_status()
         logging.info(f"📤 Javob foydalanuvchiga yuborildi ({recipient_id}): {message_text[:50]}...")
         logging.info(f"📡 Meta serveridan javob: {r.status_code} - {r.text}")
-    except requests.exceptions.RequestException as e:
-        logging.error(f"❌ Meta API'ga xabar yuborishda xatolik: {e}", exc_info=True)
-        if r is not None:
-            logging.error(f"❌ Meta javobi (xato): {r.status_code} - {r.text}")
+    except requests.exceptions.HTTPError as http_err:
+        # HTTP 400 xatosi, odatda foydalanuvchiga xabar yuborish huquqi yo'qligi sababli yuzaga keladi.
+        # Bu holatda, Meta serveridan kelgan xato ma'lumotlarini aniqroq ko'rsatish foydali.
+        try:
+            error_details = r.json()
+            error_message = error_details.get("error", {}).get("message", "Noma'lum xato")
+            error_code = error_details.get("error", {}).get("code", "N/A")
+            logging.error(f"❌ Meta API'ga xabar yuborishda HTTP xato: {http_err}. Xato kodi: {error_code}, Xato xabari: '{error_message}'")
+            logging.info(f"💡 Eslatma: '(#100) Podxodyashie polzovateli ne naydeny' kabi xato foydalanuvchi sizning botingizga avval xabar yubormagan bo'lsa yoki sizda ularga yozish uchun ruxsat bo'lmasa yuzaga keladi.")
+        except json.JSONDecodeError:
+            logging.error(f"❌ Meta API'ga xabar yuborishda HTTP xato: {http_err}. Javob JSON formatida emas. To'liq javob: {r.text}")
+    except requests.exceptions.RequestException as req_err:
+        logging.error(f"❌ Meta API'ga xabar yuborishda xato: {req_err}", exc_info=True)
     except Exception as e:
         logging.error(f"❌ Xabar yuborishda noma'lum xato: {e}", exc_info=True)
 
