@@ -128,6 +128,11 @@ def add_initial_faqs():
             "question_keywords": ["narx", "qancha turadi", "pul", "to'lov", "batafsil ma'lumot", "price", "cost", "how much", "payment", "detailed information"],
             "answer_text_uz": "Narxlar xizmat turiga qarab farq qiladi. Batafsil ma'lumot olish uchun iltimos, biz bilan telefon orqali bog'laning yoki telefon raqamingizni yozib qoldiring, biz siz bilan bog'lanamiz.",
             "answer_text_en": "Prices vary depending on the service. For detailed information, please contact us by phone or leave your phone number, and we will contact you."
+        },
+        {
+            "question_keywords": ["bog'lanmadilar", "qo'ng'iroq qilmadingiz", "bog'lanmadingiz", "no one called", "didn't call", "you didn't contact"],
+            "answer_text_uz": "Siz bilan bog'lanamiz, noqulayliklar uchun uzr.",
+            "answer_text_en": "We apologize for the inconvenience and will contact you shortly."
         }
     ]
 
@@ -230,10 +235,19 @@ def webhook():
                         phone_number = found_phone_numbers[0]
                         logging.info(f"📞 Telefon raqami aniqlandi: {phone_number}")
                         send_to_telegram_bot(sender_id, phone_number, user_msg)
-                        reply = "Raqamingiz qabul qilindi. Tez orada siz bilan bog'lanamiz. E'tiboringiz uchun rahmat!"
+                        reply = "Raqamingiz qabul qilindi. Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat!"
                         send_message(sender_id, reply)
                     else:
                         current_time = time.time()
+                        
+                        # NEW: Check for thank you message first
+                        if "rahmat" in user_msg_lower or "raxmat" in user_msg_lower or "tashakkur" in user_msg_lower:
+                            send_message(sender_id, "Sog' bo'ling!")
+                            return "ok", 200
+                        elif "thank you" in user_msg_lower or "thanks" in user_msg_lower:
+                            send_message(sender_id, "You're welcome!")
+                            return "ok", 200
+                        
                         if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower or "hello" in user_msg_lower:
                             if sender_id not in user_last_greeting_time or \
                                (current_time - user_last_greeting_time[sender_id]) > 24 * 3600:
@@ -251,7 +265,7 @@ def webhook():
                         detected_lang = 'uz' # Default language is Uzbek
                         
                         # Simple language detection for FAQ matching
-                        if any(keyword in user_msg_lower for keyword in ["address", "location", "services", "contact", "phone", "price", "course"]):
+                        if any(keyword in user_msg_lower for keyword in ["address", "location", "services", "contact", "phone", "price", "course", "thank you", "thanks", "called", "contacted"]):
                             detected_lang = 'en'
 
                         for faq in cached_faqs:
@@ -337,9 +351,10 @@ def send_to_telegram_bot(instagram_sender_id, phone_number, original_message):
 
     telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     text_message = (
-        f"✅ Yangi telefon raqami qabul qilindi!\n"
+        f"⚠️ Yangi telefon raqami qabul qilindi!\n"
         f"Instagram foydalanuvchisi ID: {instagram_sender_id}\n"
         f"Telefon raqami: {phone_number}\n"
+        f"Asl xabar: {original_message}"
     )
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
