@@ -132,7 +132,6 @@ def save_to_cache(question, answer):
     except Exception as e:
         logging.error(f"❌ Keshga ma'lumot saqlashda xato: {e}", exc_info=True)
 
-
 # Function to add initial FAQs to Firestore (for one-time use)
 def add_initial_faqs():
     if not db:
@@ -145,13 +144,38 @@ def add_initial_faqs():
     initial_faqs_data = [
         {
             "question_keywords": ["xizmatlar", "qanday", "nima", "qilasiz", "xizmat", "turlari", "services", "what", "do"],
-            "answer_text_uz": "Biz Hijama Centre klinikasida sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz. 🌸 Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya. 😊 Batafsil ma'lumot uchun operatorlarimiz bilan bog'laning.",
-            "answer_text_en": "At Hijama Centre, we offer natural treatments for your health and beauty. 🌸 Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology. 😊 For more information, please contact our operators."
+            "answer_text_uz": "🌸 Hijama Centre klinikasida sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz.\nMuolajalarimiz:\n- Hijoma\n- Massaj\n- Manual terapiya\n- Girodoterapiya\n- Kosmetologiya\nBatafsil ma'lumot uchun operatorlarimiz bilan bog'laning.",
+            "answer_text_en": "🌸 At Hijama Centre, we offer natural treatments for your health and beauty.\nOur services include:\n- Hijama\n- Massage\n- Manual Therapy\n- Hirudotherapy\n- Kosmetology\nFor more information, please contact our operators."
+        },
+        {
+            "question_keywords": ["hijoma", "hijama", "cupping"],
+            "answer_text_uz": "🩸 Hijoma (banka bilan davolash) - bu qadimiy tabiiy usul bo'lib, tanani tozalash va turli kasalliklarni davolash uchun qo'llaniladi. Islomda sunnat amali hisoblanadi.\nBatafsil ma'lumot uchun biz bilan bog'laning yoki telefon raqamingizni qoldiring.",
+            "answer_text_en": "🩸 Hijama (cupping therapy) is an ancient natural method used for body cleansing and treating various diseases. It is considered a Sunnah act in Islam.\nFor detailed information, please contact us or leave your phone number."
+        },
+        {
+            "question_keywords": ["massaj", "massage"],
+            "answer_text_uz": "💆‍♂️ Bizda mushaklardagi og'riqlarni yo'qotish va qon aylanishini yaxshilash uchun turli xil massaj turlari mavjud.\nBatafsil ma'lumot uchun biz bilan bog'laning yoki telefon raqamingizni qoldiring.",
+            "answer_text_en": "💆‍♂️ We offer various types of massage to relieve muscle pain and improve blood circulation.\nFor detailed information, please contact us or leave your phone number."
+        },
+        {
+            "question_keywords": ["girodoterapiya", "leech", "zuluk"],
+            "answer_text_uz": "💧 Girodoterapiya (zuluk bilan davolash) – bu qon bosimini normallashtirish, qonni suyultirish va yallig'lanishni kamaytirish uchun dorivor zuluklardan foydalanish.\nBatafsil ma'lumot uchun biz bilan bog'laning yoki telefon raqamingizni qoldiring.",
+            "answer_text_en": "💧 Hirudotherapy (leech therapy) is the use of medicinal leeches to normalize blood pressure, thin blood, and reduce inflammation.\nFor detailed information, please contact us or leave your phone number."
+        },
+        {
+            "question_keywords": ["manual terapiya", "manual therapy"],
+            "answer_text_uz": "✋ Manual terapiya – bu mutaxassisning qo'llari bilan tananing og'riqli joylariga, suyaklarga, mushaklarga va bo'g'imlarga bevosita ta'sir ko'rsatish usuli.\nBatafsil ma'lumot uchun biz bilan bog'laning yoki telefon raqamingizni qoldiring.",
+            "answer_text_en": "✋ Manual therapy is a hands-on treatment method where a specialist directly affects painful areas of the body or bones, muscles, joints with their hands.\nFor detailed information, please contact us or leave your phone number."
+        },
+        {
+            "question_keywords": ["kosmetologiya", "cosmetology"],
+            "answer_text_uz": "✨ Kosmetologiya – bu tabiiy mahsulotlar va usullar yordamida yuz va tana terisini parvarish qilish.\nBatafsil ma'lumot uchun biz bilan bog'laning yoki telefon raqamingizni qoldiring.",
+            "answer_text_en": "✨ Cosmetology is the care of face and body skin using natural products and methods.\nFor detailed information, please contact us or leave your phone number."
         },
         {
             "question_keywords": ["kurslar", "o'qimoqchiman", "o'qish", "o'rgatish", "o'rgating", "kurs", "courses", "study", "learn", "teach"],
-            "answer_text_uz": "Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud.👩‍🎓 Hamshiralik: 3 oy. Massaj: 2 oy. Hijoma: 1 oy. Girodoterapiya: 15 kun. Kursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. 📜 Narxlar va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz! 📞",
-            "answer_text_en": "We have specialized courses for those who want to build a career in natural medicine. 👩‍🎓 Nursing: 3 months. Massage: 2 months. Hijama: 1 month. Hirudotherapy: 15 days. Upon successful completion, you will receive an Egyptian Certificate. 📜 For prices and other details, please leave your phone number, and we will contact you shortly! 📞"
+            "answer_text_uz": "👩‍🎓 Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud.\nKurslarimiz:\n- Hamshiralik: 3 oy\n- Massaj: 2 oy\n- Hijoma: 1 oy\n- Girodoterapiya: 15 kun\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. 📜 Batafsil ma'lumot uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz!",
+            "answer_text_en": "👩‍🎓 We have specialized courses for those who want to build a career in natural medicine.\nOur courses:\n- Nursing: 3 months\n- Massage: 2 months\n- Hijama: 1 month\n- Hirudotherapy: 15 days\nUpon successful completion, you will receive an Egyptian Certificate. 📜 For details, please leave your phone number, and we will contact you shortly!"
         },
         {
             "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where", "ofis"],
@@ -160,28 +184,28 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["telefon", "raqam", "aloqa", "bog'lanish", "phone", "number", "contact"],
-            "answer_text_uz": "Biz bilan bog'lanish uchun: 📞 Telefon: +998 90 988 03 03. 💬 Telegram: @hijamacentre1",
-            "answer_text_en": "You can reach us at: 📞 Phone: +998 90 988 03 03. 💬 Telegram: @hijamacentre1"
+            "answer_text_uz": "📞 Biz bilan bog'lanish uchun:\n- Telefon: +998 90 988 03 03\n- Telegram: @hijamacentre1",
+            "answer_text_en": "📞 You can reach us at:\n- Phone: +998 90 988 03 03\n- Telegram: @hijamacentre1"
         },
         {
             "question_keywords": ["narx", "qancha", "turadi", "pul", "to'lov", "batafsil", "ma'lumot", "price", "cost", "how much", "payment", "detailed", "information"],
-            "answer_text_uz": "Har bir xizmatimizning narxi individualdir. Narxlar haqida aniq ma'lumot olish uchun iltimos, telefon raqamingizni qoldiring. 📞",
-            "answer_text_en": "The price for each of our services is individual. To get accurate information about prices, please leave your phone number. 📞"
+            "answer_text_uz": "💵 Har bir xizmatimizning narxi individualdir. Narxlar haqida aniq ma'lumot olish uchun iltimos, telefon raqamingizni qoldiring.",
+            "answer_text_en": "💵 The price for each of our services is individual. To get accurate information about prices, please leave your phone number."
         },
         {
             "question_keywords": ["bog'lanmadilar", "qo'ng'iroq", "qilmadingiz", "bog'lanmadingiz", "no one called", "didn't call", "you didn't contact"],
-            "answer_text_uz": "Uzr, biz siz bilan tez orada bog'lanamiz. 🥺 Noqulayliklar uchun uzr so'raymiz.",
-            "answer_text_en": "We apologize for the inconvenience. 🥺 We will contact you shortly to assist you."
+            "answer_text_uz": "🥺 Uzr, biz siz bilan tez orada bog'lanamiz. Noqulayliklar uchun uzr so'raymiz.",
+            "answer_text_en": "🥺 We apologize for the inconvenience. We will contact you shortly to assist you."
         },
         {
             "question_keywords": ["qabul", "vaqtlari", "qaysi", "vaqtda", "soat", "qachon"],
-            "answer_text_uz": "Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha. ⏰ Oldindan ro'yxatdan o'tishni unutmang!✍️",
-            "answer_text_en": "Our reception hours are from 7:00 AM to 7:00 PM. ⏰ Don't forget to book in advance!✍️"
+            "answer_text_uz": "⏰ Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha.\nOldindan ro'yxatdan o'tishni unutmang!✍️",
+            "answer_text_en": "⏰ Our reception hours are from 7:00 AM to 7:00 PM.\nDon't forget to book in advance!✍️"
         },
         {
             "question_keywords": ["biz haqimizda", "markaz haqida", "biz kim", "about us", "about center", "who are we"],
-            "answer_text_uz": "Biz Hijama Centre klinikasi. 😊 Sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya. 🌸",
-            "answer_text_en": "We are Hijama Centre. 😊 We offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology. 🌸"
+            "answer_text_uz": "😊 Biz Hijama Centre klinikasi.\nSog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz.\nMuolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya.",
+            "answer_text_en": "😊 We are Hijama Centre.\nWe offer a wide range of natural treatments for your health and beauty.\nOur services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology."
         }
     ]
 
@@ -202,45 +226,42 @@ if db and not cached_faqs:
 
 # System prompt (combined for Uzbek and English)
 SYSTEM_PROMPT = """
-You are the official artificial intelligence operator of "Hijama Centre". We specialize in treating all diseases with natural methods.
-Always respond to clients politely, respectfully, clearly, and helpfully. You are a sales bot, so every word you say should attract interest and retain the client.
-You MUST automatically detect the language of the user's message (Uzbek or English) and respond in that same language. Do not mix languages.
-You must use emojis where appropriate to make the conversation friendly and engaging.
+Siz "Hijama Centre"ning rasmiy sun'iy intellekt operatorisiz. Biz barcha kasalliklarni tabiiy usullar bilan davolashga ixtisoslashganmiz.
+Mijozlarga har doim xushmuomala, hurmat bilan, aniq va foydali javob bering. Siz savdo boti ekanligingizni unutmang, shuning uchun har bir aytgan so'zingiz qiziqish uyg'otishi va mijozni saqlab qolishi kerak.
+Siz foydalanuvchining xabar tilini (o'zbek yoki ingliz) avtomatik aniqlashingiz va xuddi shu tilda javob berishingiz SHART. Tillarni aralashtirib yubormang.
+Har bir javobda faqat bitta emoji ishlatishingiz va uni javobning boshiga yoki oxiriga qo'yishingiz SHART.
+Har bir yangi jumlani yangi qatordan boshlashingiz SHART.
 
-**Response Rules:**
-1.  Only talk about our services, courses, address, and contact information, briefly and clearly.
-2.  **If asked about prices or detailed information, do not answer directly.** Instead, reply in a friendly tone: "Batafsil ma'lumot olish uchun iltimos, telefon raqamingizni yozib qoldiring. Biz siz bilan tez orada bog'lanamiz! 📞😊" or "To get detailed information, please leave your phone number. We will contact you shortly! 📞😊".
-3.  **Do not provide any information from the internet.** All information must be only from this prompt.
-4.  **Do not give medical advice about diseases, their symptoms, or treatment methods.** Provide only general information about the services and courses offered at our center.
-5.  Do not get distracted by other topics. If other questions are asked, politely ask for a phone number and inform them that our operators will contact them shortly. Be polite in every word.
-6.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information, concisely.**
-7.  **Make your responses as short and concise as possible. Do not use unnecessary sentences. Try to respond within 100-150 tokens.**
-8.  **Always use emojis.**
-8.  **Write from the paragraph messages divide them with paragrahp when neccecary information not at all where important**
+**Javob berish qoidalari:**
+1.  Faqat bizning xizmatlarimiz, kurslarimiz, manzilimiz va aloqa ma'lumotlarimiz haqida qisqacha va aniq gapiring.
+2.  **Agar narxlar yoki batafsil ma'lumot so'ralsa, to'g'ridan-to'g'ri javob bermang.** Buning o'rniga, do'stona ohangda javob bering: "📞 Batafsil ma'lumot olish uchun iltimos, telefon raqamingizni yozib qoldiring. Biz siz bilan tez orada bog'lanamiz!" yoki "📞 To get detailed information, please leave your phone number. We will contact you shortly!".
+3.  **Har bir xizmat haqida alohida ma'lumot bering.** Masalan, agar mijoz "hijoma" haqida so'rasa, faqat hijoma haqida javob bering va boshqa xizmatlarni (massaj, kosmetologiya) qo'shmang.
+4.  **Internetdan hech qanday ma'lumot bermang.** Barcha ma'lumotlar faqat shu prompt'dan olinishi shart.
+5.  **Kasalliklar, ularning simptomlari yoki davolash usullari haqida tibbiy maslahatlar bermang.** Faqat markazimizda taklif qilinadigan xizmatlar va kurslar haqida umumiy ma'lumot bering.
+6.  Boshqa mavzularga chalg'imang. Agar boshqa savollar berilsa, muloyimlik bilan telefon raqam so'rang va operatorlarimiz tez orada bog'lanishini ayting. Har bir so'zingizda muloyim bo'ling.
+7.  **Faqat savollarga javob bering. "Ha" yoki shunga o'xshash ortiqcha so'zlarni o'zingizdan qo'shmang. Faqat so'ralgan ma'lumotni qisqa qilib bering.**
+8.  **Javoblaringizni iloji boricha qisqa va lo'nda qiling. Keraksiz jumlalardan foydalanmang. 100-150 belgidan oshirmaslikka harakat qiling.**
 
-Our main services:
--   **Hijama (cupping therapy):** An ancient natural method of body cleansing and treating various diseases. It is considered a Sunnah act in Islam.
--   **Massaj:** Various types of massage (therapeutic, relaxing, sports massage) to relieve muscle pain and improve blood circulation.
--   **Hirudotherapy (leech therapy):** The use of medicinal leeches to normalize blood pressure, thin blood, and reduce inflammation.
--   **Manual therapy:** This is a hands-on treatment method where a specialist directly affects painful areas of the body or bones, muscles, joints with their hands.
--   **Kosmetologiya / Cosmetology:** Face and body skin care using natural products and methods.
--   **Boshqa tabiiy usullar / Other natural methods:** Other natural treatment methods tailored to the individual needs of each client.
+**Bizning asosiy xizmatlarimiz:**
+-   **Hijoma (banka bilan davolash):** Tanani tozalash va turli kasalliklarni davolashning qadimiy tabiiy usuli. Islomda sunnat amali hisoblanadi.
+-   **Massaj:** Mushaklardagi og'riqlarni yo'qotish va qon aylanishini yaxshilash uchun turli massaj turlari (davolovchi, bo'shashtiruvchi, sport massaji).
+-   **Girodoterapiya (zuluk bilan davolash):** Qon bosimini normallashtirish, qonni suyultirish va yallig'lanishni kamaytirish uchun dorivor zuluklardan foydalanish.
+-   **Manual terapiya:** Mutaxassisning qo'llari bilan tananing og'riqli joylariga, suyaklarga, mushaklarga va bo'g'imlarga bevosita ta'sir ko'rsatish usuli.
+-   **Kosmetologiya:** Tabiiy mahsulotlar va usullar yordamida yuz va tana terisini parvarish qilish.
 
-We not only provide services, but also train people in these services; we have courses.
-Our training courses:
--   **Hamshiralik kursi / Nursing Course:** Duration 3 months.
--   **Massaj kursi / Massage Course:** Duration 2 months.
--   **Hijoma kursi / Hijama Course:** Duration 1 month.
--   **Girodoterapiya (zuluk) kursi / Hirudotherapy (Leech) Course:** Duration 15 days.
-Upon completion of the course, participants receive an **Egyptian Certificate**.
+**Bizning o'quv kurslarimiz:**
+-   **Hamshiralik kursi:** Davomiyligi 3 oy.
+-   **Massaj kursi:** Davomiyligi 2 oy.
+-   **Hijoma kursi:** Davomiyligi 1 oy.
+-   **Girodoterapiya (zuluk) kursi:** Davomiyligi 15 kun.
+Kursni tamomlaganlarga **Misr sertifikati** beriladi.
 
-Our address:
--   **Manzil / Address:** Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A.
+**Bizning manzilimiz:**
+-   **Manzil:** Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A.
 
-Contact us:
--   **Telefon / Phone:** +998 90 988 03 03
-Times of work:
--   **Ish vaqti / Time:** 9:00-21:00
+**Aloqa uchun:**
+-   **Telefon:** +998 90 988 03 03
+-   **Telegram:** @hijamacentre1
 """
 
 # Webhook verification (GET)
@@ -299,7 +320,7 @@ def webhook():
                         phone_number = found_phone_numbers[0]
                         logging.info(f"📞 Telefon raqami aniqlandi: {phone_number}")
                         send_to_telegram_bot(sender_id, phone_number, user_msg)
-                        reply = "Ajoyib! Telefon raqamingizni qabul qildik. ✅ Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat! 😊"
+                        reply = "📞 Ajoyib! Telefon raqamingizni qabul qildik.\nTez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat! 😊"
                         send_message(sender_id, reply)
                         return "ok", 200
                     
@@ -307,26 +328,26 @@ def webhook():
                     
                     # Salomlashish uchun javob
                     if "yaxshimisiz" in user_msg_lower or "qaleysiz" in user_msg_lower:
-                        reply = "Rahmat, yaxshi! 😊 Sizga qanday yordam bera olaman?"
+                        reply = "😊 Rahmat, yaxshi!\nSizga qanday yordam bera olaman?"
                         send_message(sender_id, reply)
                         return "ok", 200
                     
                     if "rahmat" in user_msg_lower or "raxmat" in user_msg_lower or "tashakkur" in user_msg_lower:
-                        send_message(sender_id, "Sog' bo'ling! 👋")
+                        send_message(sender_id, "😊 Sog' bo'ling!")
                         return "ok", 200
                     elif "thank you" in user_msg_lower or "thanks" in user_msg_lower:
-                        send_message(sender_id, "You're welcome! 😊")
+                        send_message(sender_id, "😊 You're welcome!")
                         return "ok", 200
                     
                     if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower or "hello" in user_msg_lower:
                         if sender_id not in user_last_greeting_time or \
                            (current_time - user_last_greeting_time[sender_id]) > 24 * 3600:
-                            reply = "Va alaykum assalam! 😊 Xush kelibsiz! Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "Hello! 😊 Welcome! How can I help you?"
+                            reply = "👋 Va alaykum assalam!\nXush kelibsiz! Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "👋 Hello!\nWelcome! How can I help you?"
                             user_last_greeting_time[sender_id] = current_time
                             send_message(sender_id, reply)
                             return "ok", 200
                         else:
-                            reply = "Qanday yordam bera olaman? 😊" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "How can I help you? 😊"
+                            reply = "😊 Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "😊 How can I help you?"
                             send_message(sender_id, reply)
                             return "ok", 200
 
@@ -388,9 +409,21 @@ def ask_gemini(question, system_prompt):
             generation_config={"max_output_tokens": 150}
         )
         reply_text = response.text.strip()
-        # Ensure emojis are added if not already present
-        if '😊' not in reply_text and '📞' not in reply_text and '👍' not in reply_text:
+        # Clean up Gemini's response to adhere to the single emoji and newline rule
+        reply_text = re.sub(r'\n+', '\n', reply_text).strip()
+        
+        # Check if an emoji exists in the response, if not add one
+        has_emoji = any(c in reply_text for c in ['📞', '😊', '👍', '🌸', '🩸', '💆‍♂️', '💧', '✋', '✨', '👩‍🎓', '📜', '📍', '✅', '💵', '🥺', '⏰', '✍️', '👋'])
+        if not has_emoji:
             reply_text += " 😊"
+
+        # Check for multiple emojis and remove them, keeping only the first or last
+        emojis_found = re.findall(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F780-\U0001F7FF\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]', reply_text)
+        if len(emojis_found) > 1:
+            first_emoji = emojis_found[0]
+            reply_text = re.sub(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F780-\U0001F7FF\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]', '', reply_text)
+            reply_text = reply_text.strip() + ' ' + first_emoji
+
         return reply_text
     except Exception as e:
         logging.error(f"❌ Gemini javobini yaratishda xato: {e}", exc_info=True)
@@ -435,7 +468,7 @@ def send_to_telegram_bot(instagram_sender_id, phone_number, original_message):
 
     telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     text_message = (
-        f"Yangi telefon raqami qabul qilindi!🎉\n"
+        f"🎉 Yangi telefon raqami qabul qilindi!\n"
         f"Instagram foydalanuvchisi ID: {instagram_sender_id}\n"
         f"Telefon raqami: {phone_number}\n"
         f"Asl xabar: {original_message}"
