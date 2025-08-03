@@ -239,6 +239,8 @@ Our address:
 
 Contact us:
 -   **Telefon / Phone:** +998 90 988 03 03
+Times of work:
+-   **Ish vaqti / Time:** 9:00-21:00
 """
 
 # Webhook verification (GET)
