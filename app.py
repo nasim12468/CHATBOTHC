@@ -157,22 +157,22 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where"],
-            "answer_text_uz": "📍 Bizning markazimiz qulay joylashgan. Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A. Sizni kutamiz! 😊",
+            "answer_text_uz": "📍 Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A. Sizni kutamiz! 😊",
             "answer_text_en": "📍 Our center is conveniently located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A. We look forward to seeing you! 😊"
         },
         {
             "question_keywords": ["telefon", "raqam", "aloqa", "bog'lanish", "phone", "number", "contact"],
-            "answer_text_uz": "📞 Biz bilan bog'lanish uchun telefon raqami: **+998 90 988 03 03**. Shuningdek, Telegram orqali ham @hijamacentre1 manziliga yozishingiz mumkin. Savollaringizga javob berishdan mamnun bo'lamiz!",
-            "answer_text_en": "📞 You can reach us by phone at: **+998 90 988 03 03**. You can also write to us on Telegram at @hijamacentre1. We would be happy to answer your questions!"
+            "answer_text_uz": "📞 Biz bilan bog'lanish uchun telefon raqami: **+998 90 988 03 03**. Shuningdek, Telegram orqali ham @hijamacentre1 manziliga yozishingiz mumkin.",
+            "answer_text_en": "📞 You can reach us by phone at: **+998 90 988 03 03**. You can also write to us on Telegram at @hijamacentre1."
         },
         {
             "question_keywords": ["narx", "qancha", "turadi", "pul", "to'lov", "batafsil", "ma'lumot", "price", "cost", "how much", "payment", "detailed", "information"],
-            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. �",
+            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. 😊",
             "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. 💰 To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions. 😊"
         },
         {
             "question_keywords": ["bog'lanmadilar", "qo'ng'iroq", "qilmadingiz", "bog'lanmadingiz", "no one called", "didn't call", "you didn't contact"],
-            "answer_text_uz": "Uzr, biz siz bilan tez orada bog'lanamiz. Noqulayliklar uchun uzr so'raymiz. 🙏",
+            "answer_text_uz": "Uzr, biz siz bilan tez orada bog'lanamiz. Noqulayliklar uchun uzr so'raymiz. �",
             "answer_text_en": "We apologize for the inconvenience. 🙏 We will contact you shortly to assist you."
         },
         {
@@ -189,6 +189,11 @@ def add_initial_faqs():
             "question_keywords": ["qabul", "vaqtlari", "qaysi", "vaqtda", "soat", "qachon"],
             "answer_text_uz": "⏰ Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha. Oldindan ro'yxatdan o'tishni unutmang!",
             "answer_text_en": "⏰ Our reception hours are from 7:00 AM to 7:00 PM. Don't forget to book in advance!"
+        },
+        {
+            "question_keywords": ["biz haqimizda", "markaz haqida", "biz kim", "about us", "about center", "who are we"],
+            "answer_text_uz": "Biz \"Hijama Centre\" klinikasi. Biz sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya (zuluk bilan davolash) va Kosmetologiya.",
+            "answer_text_en": "We are \"Hijama Centre.\" We offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy (leech therapy), and Kosmetology."
         }
     ]
 
@@ -273,6 +278,12 @@ def webhook():
     if data.get("object") == "instagram":
         for entry in data.get("entry", []):
             for messaging_event in entry.get("messaging", []):
+                
+                # Botning o'zi yuborgan xabarlarni o'tkazib yuborish
+                if messaging_event.get("message", {}).get("is_echo"):
+                    logging.info("♻️ Echo xabari qabul qilindi. E'tiborsiz qoldirilmoqda.")
+                    continue
+
                 message_id = messaging_event.get("message", {}).get("mid")
                 if message_id and message_id in processed_message_ids:
                     logging.info(f"♻️ Xabar {message_id} allaqachon qayta ishlangan. O'tkazib yuborilmoqda.")
@@ -366,6 +377,7 @@ def webhook():
                         
                         logging.info(f"   - FAQ kalit so'zlari: {faq_keywords_set}")
                         
+                        # Faqat FAQ kalit so'zlariga mos keladigan javobni qaytarish
                         if not user_msg_words.isdisjoint(faq_keywords_set):
                             if detected_lang == 'en':
                                 matched_faq_answer = faq.get("answer_text_en")
