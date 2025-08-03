@@ -147,43 +147,43 @@ def add_initial_faqs():
     initial_faqs_data = [
         {
             "question_keywords": ["xizmatlar", "qanday", "nima", "qilasiz", "xizmat", "turlari", "services", "what", "do"],
-            "answer_text_uz": "Biz \"Hijama Centre\" klinikasida sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. ✅ Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya (zuluk bilan davolash) va Kosmetologiya. \n\nSizni qiziqtirgan xizmat turi bo'yicha batafsil ma'lumot olish uchun operatorlarimiz bilan bog'laning.",
-            "answer_text_en": "At \"Hijama Centre,\" we offer a wide range of natural treatments for your health and beauty. ✅ Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy (leech therapy), and Kosmetology. \n\nFor more detailed information about a specific service, please contact our operators."
+            "answer_text_uz": "Biz \"Hijama Centre\" klinikasida sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya (zuluk bilan davolash) va Kosmetologiya.\n\nSizni qiziqtirgan xizmat turi bo'yicha batafsil ma'lumot olish uchun operatorlarimiz bilan bog'laning.",
+            "answer_text_en": "At \"Hijama Centre,\" we offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy (leech therapy), and Kosmetology.\n\nFor more detailed information about a specific service, please contact our operators."
         },
         {
             "question_keywords": ["kurslar", "o'qimoqchiman", "o'qish", "o'rgatish", "o'rgating", "kurs", "courses", "study", "learn", "teach"],
-            "answer_text_uz": "Ajoyib! Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud. 🎓\n\n- **Hamshiralik:** 3 oy\n- **Massaj:** 2 oy\n- **Hijoma:** 1 oy\n- **Girodoterapiya:** 15 kun\n\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Kurs narxlari va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz.",
-            "answer_text_en": "That's great! We have specialized courses for those who want to build a career in natural medicine. 🎓\n\n- **Nursing:** 3 months\n- **Massage:** 2 months\n- **Hijoma:** 1 month\n- **Hirudotherapy:** 15 days\n\nUpon successful completion, you will receive an Egyptian Certificate. For course prices and other details, please leave your phone number, and we will contact you."
+            "answer_text_uz": "Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud.\n\n- Hamshiralik: 3 oy\n- Massaj: 2 oy\n- Hijoma: 1 oy\n- Girodoterapiya: 15 kun\n\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Kurs narxlari va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz.",
+            "answer_text_en": "We have specialized courses for those who want to build a career in natural medicine.\n\n- Nursing: 3 months\n- Massage: 2 months\n- Hijama: 1 month\n- Hirudotherapy: 15 days\n\nUpon successful completion, you will receive an Egyptian Certificate. For course prices and other details, please leave your phone number, and we will contact you."
         },
         {
-            "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where"],
-            "answer_text_uz": "📍 Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A. Sizni kutamiz! 😊",
-            "answer_text_en": "📍 Our center is conveniently located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A. We look forward to seeing you! 😊"
+            "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where", "ofis"],
+            "answer_text_uz": "📍 Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A.",
+            "answer_text_en": "📍 Our center is located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A."
         },
         {
             "question_keywords": ["telefon", "raqam", "aloqa", "bog'lanish", "phone", "number", "contact"],
-            "answer_text_uz": "📞 Biz bilan bog'lanish uchun telefon raqami: **+998 90 988 03 03**. Shuningdek, Telegram orqali ham @hijamacentre1 manziliga yozishingiz mumkin.",
-            "answer_text_en": "📞 You can reach us by phone at: **+998 90 988 03 03**. You can also write to us on Telegram at @hijamacentre1."
+            "answer_text_uz": "📞 Biz bilan bog'lanish uchun: Telefon: +998 90 988 03 03. Telegram: @hijamacentre1",
+            "answer_text_en": "📞 You can reach us at: Phone: +998 90 988 03 03. Telegram: @hijamacentre1"
         },
         {
             "question_keywords": ["narx", "qancha", "turadi", "pul", "to'lov", "batafsil", "ma'lumot", "price", "cost", "how much", "payment", "detailed", "information"],
-            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. 😊",
-            "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. 💰 To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions. 😊"
+            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi.",
+            "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions."
         },
         {
             "question_keywords": ["bog'lanmadilar", "qo'ng'iroq", "qilmadingiz", "bog'lanmadingiz", "no one called", "didn't call", "you didn't contact"],
-            "answer_text_uz": "Uzr, biz siz bilan tez orada bog'lanamiz. Noqulayliklar uchun uzr so'raymiz. �",
-            "answer_text_en": "We apologize for the inconvenience. 🙏 We will contact you shortly to assist you."
+            "answer_text_uz": "Uzr, biz siz bilan tez orada bog'lanamiz. Noqulayliklar uchun uzr so'raymiz.",
+            "answer_text_en": "We apologize for the inconvenience. We will contact you shortly to assist you."
         },
         {
             "question_keywords": ["qudratulloh", "kim", "qaysi", "hajjom", "qudratulla"],
-            "answer_text_uz": "Qudratulloh hajjomimiz 7+ yil tajribalik hijoma va zuluk mutaxassisi. Ular bemorlarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Markazimiz asoschisi hisoblanadilar. Xohlasangiz boshqa mutaxassislarimiz ham bor. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring. 😊",
-            "answer_text_en": "Qudratulloh is a hijama and leech specialist with over 7 years of experience. He takes an individual approach to each patient, performing hijama and leech therapy based on their complaints. He is also the founder of our center. We also have other specialists if you prefer. To get more detailed information, please leave your phone number. 😊"
+            "answer_text_uz": "Qudratulloh hajjomimiz 7+ yil tajribalik hijoma va zuluk mutaxassisi. Ular bemorlarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Markazimiz asoschisi hisoblanadilar. Xohlasangiz boshqa mutaxassislarimiz ham bor. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring.",
+            "answer_text_en": "Qudratulloh is a hijama and leech specialist with over 7 years of experience. He takes an individual approach to each patient, performing hijama and leech therapy based on their complaints. He is also the founder of our center. We also have other specialists if you prefer. To get more detailed information, please leave your phone number."
         },
         {
             "question_keywords": ["zilola", "opa", "kim", "qaysi", "hajjoma"],
-            "answer_text_uz": "Zilola opa hajjomamiz 10+ yil tajribalik mutaxassis. Ular bemor ayollarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring. 😊",
-            "answer_text_en": "Zilola opa is a hijama specialist with over 10 years of experience. She takes an individual approach to female patients, performing treatments based on their complaints. To get more detailed information, please leave your phone number. 😊"
+            "answer_text_uz": "Zilola opa hajjomamiz 10+ yil tajribalik mutaxassis. Ular bemor ayollarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring.",
+            "answer_text_en": "Zilola opa is a hijama specialist with over 10 years of experience. She takes an individual approach to female patients, performing treatments based on their complaints. To get more detailed information, please leave your phone number."
         },
         {
             "question_keywords": ["qabul", "vaqtlari", "qaysi", "vaqtda", "soat", "qachon"],
@@ -192,8 +192,8 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["biz haqimizda", "markaz haqida", "biz kim", "about us", "about center", "who are we"],
-            "answer_text_uz": "Biz \"Hijama Centre\" klinikasi. Biz sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya (zuluk bilan davolash) va Kosmetologiya.",
-            "answer_text_en": "We are \"Hijama Centre.\" We offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy (leech therapy), and Kosmetology."
+            "answer_text_uz": "Biz \"Hijama Centre\" klinikasi. Sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya.",
+            "answer_text_en": "We are \"Hijama Centre.\" We offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology."
         }
     ]
 
@@ -303,7 +303,7 @@ def webhook():
                         phone_number = found_phone_numbers[0]
                         logging.info(f"📞 Telefon raqami aniqlandi: {phone_number}")
                         send_to_telegram_bot(sender_id, phone_number, user_msg)
-                        reply = "Ajoyib! Telefon raqamingizni qabul qildik. ✅ Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat! 😊"
+                        reply = "Ajoyib! Telefon raqamingizni qabul qildik. ✅ Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat!"
                         send_message(sender_id, reply)
                         # Suhbat holatini tozalash
                         user_state.pop(sender_id, None)
@@ -320,27 +320,27 @@ def webhook():
                             user_state.pop(sender_id, None) # Holatni tozalash
                             return "ok", 200
                         elif "ayol" in user_msg_lower or "female" in user_msg_lower:
-                            reply = "Sizni tushundim, Zilola opa hajjomani o'zlari kelmoqchimisiz? 😊"
+                            reply = "Sizni tushundim, Zilola opa hajjomani o'zlari kelmoqchimisiz?"
                             send_message(sender_id, reply)
                             user_state.pop(sender_id, None) # Holatni tozalash
                             return "ok", 200
                         else:
-                            reply = "Iltimos, erkak yoki ayol ekanligingizni ayting. 😊"
+                            reply = "Iltimos, erkak yoki ayol ekanligingizni ayting."
                             send_message(sender_id, reply)
                             return "ok", 200
                     
                     # "Yaxshimisiz?" savoliga muloyim javob berish
                     if "yaxshimisiz" in user_msg_lower or "qaleysiz" in user_msg_lower:
-                        reply = "Rahmat, yaxshi! 😊 Sizga qanday yordam bera olaman?"
+                        reply = "Rahmat, yaxshi! Sizga qanday yordam bera olaman?"
                         send_message(sender_id, reply)
                         return "ok", 200
                     
                     # "Rahmat" uchun javob berish
                     if "rahmat" in user_msg_lower or "raxmat" in user_msg_lower or "tashakkur" in user_msg_lower:
-                        send_message(sender_id, "Sog' bo'ling! 😊")
+                        send_message(sender_id, "Sog' bo'ling!")
                         return "ok", 200
                     elif "thank you" in user_msg_lower or "thanks" in user_msg_lower:
-                        send_message(sender_id, "You're welcome! 😊")
+                        send_message(sender_id, "You're welcome!")
                         return "ok", 200
                     
                     if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower or "hello" in user_msg_lower:
@@ -358,7 +358,7 @@ def webhook():
                     # 2. "Hijoma" uchun maxsus savol berish
                     if "hijoma" in user_msg_lower:
                         user_state[sender_id] = "waiting_for_gender"
-                        reply = "Erkakmisiz yoki ayol? 😊"
+                        reply = "Erkakmisiz yoki ayol?"
                         send_message(sender_id, reply)
                         return "ok", 200
                     
