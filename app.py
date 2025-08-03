@@ -65,8 +65,9 @@ except Exception as e:
 processed_message_ids = set()
 # Dictionary to store the last greeting time for users
 user_last_greeting_time = {}
-# Dictionary to store the last message from each user
-user_last_message = {}
+# Dictionary to store the last bot message for each user that requested a phone number.
+# Mijoz telefon raqami so'ralgan oxirgi xabarni eslab qolish uchun yangi lug'at.
+bot_last_phone_request_message = {}
 # List to cache FAQs in memory
 cached_faqs = []
 
@@ -321,17 +322,14 @@ def webhook():
                     logging.info(f"👤 Foydalanuvchidan xabar ({sender_id}): {user_msg}")
                     user_msg_lower = user_msg.lower()
 
-                    # Har bir foydalanuvchining oxirgi xabarini saqlash
-                    user_last_message[sender_id] = user_msg
-
                     # Agar xabarda telefon raqami bo'lsa
                     found_phone_numbers = PHONE_NUMBER_REGEX.findall(user_msg)
                     if found_phone_numbers:
                         phone_number = found_phone_numbers[0]
                         logging.info(f"📞 Telefon raqami aniqlandi: {phone_number}")
-                        # Oldingi xabarni olish
-                        previous_message = user_last_message.get(sender_id, "Noma'lum")
-                        send_to_telegram_bot(sender_id, phone_number, previous_message)
+                        # Bot mijozdan raqam so'ragan oxirgi xabarni olish
+                        previous_bot_message = bot_last_phone_request_message.get(sender_id, "Mijoz aloqa uchun raqam qoldirdi.")
+                        send_to_telegram_bot(sender_id, phone_number, previous_bot_message)
                         reply = "📞 Ajoyib! Telefon raqamingizni qabul qildik.\nTez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat! 😊"
                         send_message(sender_id, reply)
                         return "ok", 200
@@ -383,6 +381,9 @@ def webhook():
                     
                     if matched_faq_answer:
                         send_message(sender_id, matched_faq_answer)
+                        # Agar javobda telefon raqam so'ralgan bo'lsa, uni eslab qolamiz.
+                        if "telefon raqam" in matched_faq_answer.lower() or "phone number" in matched_faq_answer.lower():
+                            bot_last_phone_request_message[sender_id] = user_msg
                         return "ok", 200
                     
                     # Agar FAQ'da mos javob topilmasa, Gemini'dan so'rash
@@ -400,6 +401,9 @@ def webhook():
                             logging.error("❌ Gemini modeli ishga tushirilmagan. Javob berish imkonsiz.")
 
                     send_message(sender_id, reply)
+                    # Agar Gemini javobida telefon raqam so'ralgan bo'lsa, uni eslab qolamiz.
+                    if "telefon raqam" in reply.lower() or "phone number" in reply.lower():
+                        bot_last_phone_request_message[sender_id] = user_msg
                 
                 elif "postback" in messaging_event:
                     logging.info(f"💬 Postback hodisasi qabul qilindi {sender_id}: {messaging_event['postback']}")
@@ -425,15 +429,15 @@ def ask_gemini(question, system_prompt):
         reply_text = re.sub(r'\n+', '\n', reply_text).strip()
         
         # Check if an emoji exists in the response, if not add one
-        has_emoji = any(c in reply_text for c in ['📞', '😊', '👍', '🌸', '🩸', '💆‍♂️', '💧', '✋', '✨', '👩‍🎓', '📜', '📍', '✅', '💵', '🥺', '⏰', '✍️', '👋'])
+        has_emoji = any(c in reply_text for c in ['📞', '😊', '👍','🩸', '💆‍♂️', '💧', '✨', '📍', '✅','⏰', '👋'])
         if not has_emoji:
             reply_text += " 😊"
 
         # Check for multiple emojis and remove them, keeping only the first or last
-        emojis_found = re.findall(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]', reply_text)
+        emojis_found = re.findall(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U00002702-\U000027B0\U000024C2-\U0001F251]', reply_text)
         if len(emojis_found) > 1:
             first_emoji = emojis_found[0]
-            reply_text = re.sub(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]', '', reply_text)
+            reply_text = re.sub(r'[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U00002702-\U000027B0\U000024C2-\U0001F251]', '', reply_text)
             reply_text = reply_text.strip() + ' ' + first_emoji
 
         return reply_text
@@ -473,7 +477,7 @@ def send_message(recipient_id, message_text):
         logging.error(f"❌ Xabar yuborishda noma'lum xato: {e}", exc_info=True)
 
 # Send phone number to Telegram bot
-def send_to_telegram_bot(instagram_sender_id, phone_number, previous_message):
+def send_to_telegram_bot(instagram_sender_id, phone_number, previous_bot_message):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         logging.error("❌ TELEGRAM_BOT_TOKEN yoki TELEGRAM_CHAT_ID o'rnatilmagan. Telefon raqamini Telegramga yuborish imkonsiz.")
         return
@@ -483,7 +487,7 @@ def send_to_telegram_bot(instagram_sender_id, phone_number, previous_message):
         f"🎉 Yangi telefon raqami qabul qilindi!\n"
         f"Instagram foydalanuvchisi ID: {instagram_sender_id}\n"
         f"Telefon raqami: {phone_number}\n"
-        f"Mijozning oxirgi savoli/xizmati: {previous_message}"
+        f"Mijozning so'ragan xizmati: {previous_bot_message}"
     )
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
