@@ -147,13 +147,13 @@ def add_initial_faqs():
     initial_faqs_data = [
         {
             "question_keywords": ["xizmatlar", "qanday", "nima", "qilasiz", "xizmat", "turlari", "services", "what", "do"],
-            "answer_text_uz": "Biz Hijama Centre klinikasida sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya.\n\nBatafsil ma'lumot uchun operatorlarimiz bilan bog'laning.",
-            "answer_text_en": "At Hijama Centre, we offer natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology.\n\nFor more information, please contact our operators."
+            "answer_text_uz": "Biz Hijama Centre klinikasida sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya. Batafsil ma'lumot uchun operatorlarimiz bilan bog'laning.",
+            "answer_text_en": "At Hijama Centre, we offer natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology. For more information, please contact our operators."
         },
         {
             "question_keywords": ["kurslar", "o'qimoqchiman", "o'qish", "o'rgatish", "o'rgating", "kurs", "courses", "study", "learn", "teach"],
-            "answer_text_uz": "Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud.\n\n- Hamshiralik: 3 oy\n- Massaj: 2 oy\n- Hijoma: 1 oy\n- Girodoterapiya: 15 kun\n\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Narxlar va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring.",
-            "answer_text_en": "We have specialized courses for those who want to build a career in natural medicine.\n\n- Nursing: 3 months\n- Massage: 2 months\n- Hijama: 1 month\n- Hirudotherapy: 15 days\n\nUpon successful completion, you will receive an Egyptian Certificate. For prices and other details, please leave your phone number."
+            "answer_text_uz": "Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud. Hamshiralik: 3 oy. Massaj: 2 oy. Hijoma: 1 oy. Girodoterapiya: 15 kun. Kursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Narxlar va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring.",
+            "answer_text_en": "We have specialized courses for those who want to build a career in natural medicine. Nursing: 3 months. Massage: 2 months. Hijama: 1 month. Hirudotherapy: 15 days. Upon successful completion, you will receive an Egyptian Certificate. For prices and other details, please leave your phone number."
         },
         {
             "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where", "ofis"],
@@ -223,7 +223,7 @@ You MUST automatically detect the language of the user's message (Uzbek or Engli
 6.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information.**
 7.  **If the user refers with words like "want to study", "courses", "study", "teach", "course" (in Uzbek or English), first provide full information about our training courses, then suggest contacting for prices.**
 8.  **Make your responses as short and concise as possible. Do not use unnecessary sentences. Try to respond within 100-150 tokens.**
-9.  **Do not use emojis.**
+9.  **use emojis on your texts by logic.**
 
 Our main services:
 -   **Hijama (cupping therapy):** An ancient natural method of body cleansing and treating various diseases. It is considered a Sunnah act in Islam.
