@@ -126,7 +126,7 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["narx", "qancha turadi", "pul", "to'lov", "batafsil ma'lumot", "price", "cost", "how much", "payment", "detailed information"],
-            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. 😊",
+            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. 😊",
             "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. 💰 To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions. 😊"
         },
         {
@@ -161,6 +161,8 @@ You MUST automatically detect the language of the user's message (Uzbek or Engli
 6.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information.**
 7.  **If the user refers with words like "want to study", "courses", "study", "teach", "course" (in Uzbek or English), first provide full information about our training courses, then suggest contacting for prices.**
 8.  **Make your responses as short and concise as possible. Do not use unnecessary sentences. Try to respond within 100-150 tokens.**
+8.  **Do not write numbers telegram contacts and adress in every message only when asks**
+9.  **Act like a human don't write unnesessary information, give only information which is aksing by client, shortly and exactly**
 
 Our main services:
 -   **Hijama (cupping therapy):** An ancient natural method of body cleansing and treating various diseases. It is considered a Sunnah act in Islam.
