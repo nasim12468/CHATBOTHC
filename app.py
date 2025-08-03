@@ -157,7 +157,7 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where"],
-            "answer_text_uz": "📍 Bizning markazimiz qulay joylashgan. Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A. Sizni kutamiz! �",
+            "answer_text_uz": "📍 Bizning markazimiz qulay joylashgan. Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A. Sizni kutamiz! 😊",
             "answer_text_en": "📍 Our center is conveniently located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A. We look forward to seeing you! 😊"
         },
         {
@@ -167,7 +167,7 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["narx", "qancha", "turadi", "pul", "to'lov", "batafsil", "ma'lumot", "price", "cost", "how much", "payment", "detailed", "information"],
-            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. 😊",
+            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. 💰 Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi. �",
             "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. 💰 To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions. 😊"
         },
         {
@@ -177,18 +177,18 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["qudratulloh", "kim", "qaysi", "hajjom", "qudratulla"],
-            "answer_text_uz": "Qudratulloh hajjomimiz 7+ yil tajribalik hijoma va zuluk mutaxassisi. Ular bemorlarga indivudual yondoshadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Markazimiz asoschisi hisoblanadilar. Xohlasangiz boshqa mutaxassislarimiz ham bor. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring. 😊",
+            "answer_text_uz": "Qudratulloh hajjomimiz 7+ yil tajribalik hijoma va zuluk mutaxassisi. Ular bemorlarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Markazimiz asoschisi hisoblanadilar. Xohlasangiz boshqa mutaxassislarimiz ham bor. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring. 😊",
             "answer_text_en": "Qudratulloh is a hijama and leech specialist with over 7 years of experience. He takes an individual approach to each patient, performing hijama and leech therapy based on their complaints. He is also the founder of our center. We also have other specialists if you prefer. To get more detailed information, please leave your phone number. 😊"
         },
         {
-            "question_keywords": ["zuluk", "girodoterapiya"],
-            "answer_text_uz": "Sizni tushundim, Zilola opa hajjomani o'zlari kelmoqchimisiz? 😊",
-            "answer_text_en": "I understand. Would you like to schedule an appointment with our specialist, Zilola opa? 😊"
+            "question_keywords": ["zilola", "opa", "kim", "qaysi", "hajjoma"],
+            "answer_text_uz": "Zilola opa hajjomamiz 10+ yil tajribalik mutaxassis. Ular bemor ayollarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring. 😊",
+            "answer_text_en": "Zilola opa is a hijama specialist with over 10 years of experience. She takes an individual approach to female patients, performing treatments based on their complaints. To get more detailed information, please leave your phone number. 😊"
         },
         {
             "question_keywords": ["qabul", "vaqtlari", "qaysi", "vaqtda", "soat", "qachon"],
-            "answer_text_uz": "Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha. ⏰ Oldindan ro'yxatdan o'tishni unutmang!",
-            "answer_text_en": "Our reception hours are from 7:00 AM to 7:00 PM. ⏰ Don't forget to book in advance!"
+            "answer_text_uz": "⏰ Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha. Oldindan ro'yxatdan o'tishni unutmang!",
+            "answer_text_en": "⏰ Our reception hours are from 7:00 AM to 7:00 PM. Don't forget to book in advance!"
         }
     ]
 
@@ -355,7 +355,7 @@ def webhook():
                     matched_faq_answer = None
                     detected_lang = 'uz'
                     
-                    if any(keyword in user_msg_lower for keyword in ["address", "location", "services", "contact", "phone", "price", "course", "thank you", "thanks", "called", "contacted", "qudratulloh"]):
+                    if any(keyword in user_msg_lower for keyword in ["address", "location", "services", "contact", "phone", "price", "course", "thank you", "thanks", "called", "contacted", "qudratulloh", "zilola"]):
                         detected_lang = 'en'
                     
                     user_msg_words = set(user_msg_lower.split())
