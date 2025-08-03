@@ -147,28 +147,28 @@ def add_initial_faqs():
     initial_faqs_data = [
         {
             "question_keywords": ["xizmatlar", "qanday", "nima", "qilasiz", "xizmat", "turlari", "services", "what", "do"],
-            "answer_text_uz": "Biz \"Hijama Centre\" klinikasida sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya (zuluk bilan davolash) va Kosmetologiya.\n\nSizni qiziqtirgan xizmat turi bo'yicha batafsil ma'lumot olish uchun operatorlarimiz bilan bog'laning.",
-            "answer_text_en": "At \"Hijama Centre,\" we offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy (leech therapy), and Kosmetology.\n\nFor more detailed information about a specific service, please contact our operators."
+            "answer_text_uz": "Biz Hijama Centre klinikasida sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya.\n\nBatafsil ma'lumot uchun operatorlarimiz bilan bog'laning.",
+            "answer_text_en": "At Hijama Centre, we offer natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology.\n\nFor more information, please contact our operators."
         },
         {
             "question_keywords": ["kurslar", "o'qimoqchiman", "o'qish", "o'rgatish", "o'rgating", "kurs", "courses", "study", "learn", "teach"],
-            "answer_text_uz": "Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud.\n\n- Hamshiralik: 3 oy\n- Massaj: 2 oy\n- Hijoma: 1 oy\n- Girodoterapiya: 15 kun\n\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Kurs narxlari va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring, biz siz bilan bog'lanamiz.",
-            "answer_text_en": "We have specialized courses for those who want to build a career in natural medicine.\n\n- Nursing: 3 months\n- Massage: 2 months\n- Hijama: 1 month\n- Hirudotherapy: 15 days\n\nUpon successful completion, you will receive an Egyptian Certificate. For course prices and other details, please leave your phone number, and we will contact you."
+            "answer_text_uz": "Bizda tabiiy tibbiyot sohasida kasb egallashni istaganlar uchun maxsus kurslar mavjud.\n\n- Hamshiralik: 3 oy\n- Massaj: 2 oy\n- Hijoma: 1 oy\n- Girodoterapiya: 15 kun\n\nKursni muvaffaqiyatli yakunlaganlarga Misr sertifikati beriladi. Narxlar va boshqa tafsilotlar haqida ma'lumot olish uchun telefon raqamingizni qoldiring.",
+            "answer_text_en": "We have specialized courses for those who want to build a career in natural medicine.\n\n- Nursing: 3 months\n- Massage: 2 months\n- Hijama: 1 month\n- Hirudotherapy: 15 days\n\nUpon successful completion, you will receive an Egyptian Certificate. For prices and other details, please leave your phone number."
         },
         {
             "question_keywords": ["manzil", "adres", "qayerdasiz", "joylashuv", "address", "location", "where", "ofis"],
-            "answer_text_uz": "📍 Manzil: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A.",
-            "answer_text_en": "📍 Our center is located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A."
+            "answer_text_uz": "Bizning manzilimiz: Toshkent shahri, Shayxontoxur tumani, Samarqand darvoza, 149A.",
+            "answer_text_en": "Our center is located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A."
         },
         {
             "question_keywords": ["telefon", "raqam", "aloqa", "bog'lanish", "phone", "number", "contact"],
-            "answer_text_uz": "📞 Biz bilan bog'lanish uchun: Telefon: +998 90 988 03 03. Telegram: @hijamacentre1",
-            "answer_text_en": "📞 You can reach us at: Phone: +998 90 988 03 03. Telegram: @hijamacentre1"
+            "answer_text_uz": "Biz bilan bog'lanish uchun: Telefon: +998 90 988 03 03. Telegram: @hijamacentre1",
+            "answer_text_en": "You can reach us at: Phone: +998 90 988 03 03. Telegram: @hijamacentre1"
         },
         {
             "question_keywords": ["narx", "qancha", "turadi", "pul", "to'lov", "batafsil", "ma'lumot", "price", "cost", "how much", "payment", "detailed", "information"],
-            "answer_text_uz": "Har bir xizmatimizning narxi individualdir va muolaja turiga bog'liq. Narxlar haqida aniq ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Operatorimiz siz bilan bog'lanib, barcha savollaringizga javob beradi.",
-            "answer_text_en": "The price for each of our services is individual and depends on the type of treatment. To get accurate information about prices, please leave your phone number. Our operator will contact you and answer all your questions."
+            "answer_text_uz": "Har bir xizmatimizning narxi individualdir. Narxlar haqida aniq ma'lumot olish uchun iltimos, telefon raqamingizni qoldiring.",
+            "answer_text_en": "The price for each of our services is individual. To get accurate information about prices, please leave your phone number."
         },
         {
             "question_keywords": ["bog'lanmadilar", "qo'ng'iroq", "qilmadingiz", "bog'lanmadingiz", "no one called", "didn't call", "you didn't contact"],
@@ -177,23 +177,23 @@ def add_initial_faqs():
         },
         {
             "question_keywords": ["qudratulloh", "kim", "qaysi", "hajjom", "qudratulla"],
-            "answer_text_uz": "Qudratulloh hajjomimiz 7+ yil tajribalik hijoma va zuluk mutaxassisi. Ular bemorlarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Markazimiz asoschisi hisoblanadilar. Xohlasangiz boshqa mutaxassislarimiz ham bor. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring.",
-            "answer_text_en": "Qudratulloh is a hijama and leech specialist with over 7 years of experience. He takes an individual approach to each patient, performing hijama and leech therapy based on their complaints. He is also the founder of our center. We also have other specialists if you prefer. To get more detailed information, please leave your phone number."
+            "answer_text_uz": "Qudratulloh hajjomimiz 7+ yil tajribaga ega. Ular bemorlarga individual yondashadilar. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring.",
+            "answer_text_en": "Qudratulloh is a hijama specialist with over 7 years of experience. He takes an individual approach to each patient. To get more information, please leave your phone number."
         },
         {
             "question_keywords": ["zilola", "opa", "kim", "qaysi", "hajjoma"],
-            "answer_text_uz": "Zilola opa hajjomamiz 10+ yil tajribalik mutaxassis. Ular bemor ayollarga individual yondashadilar, shikoyatlardan kelib chiqib muolajani o'tkazadilar. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring.",
-            "answer_text_en": "Zilola opa is a hijama specialist with over 10 years of experience. She takes an individual approach to female patients, performing treatments based on their complaints. To get more detailed information, please leave your phone number."
+            "answer_text_uz": "Zilola opa hajjomamiz 10+ yil tajribaga ega. Ular bemor ayollarga individual yondashadilar. Iltimos, qolgan ma'lumotlarni olish uchun telefon raqamingizni qoldiring.",
+            "answer_text_en": "Zilola opa is a hijama specialist with over 10 years of experience. She takes an individual approach to female patients. To get more information, please leave your phone number."
         },
         {
             "question_keywords": ["qabul", "vaqtlari", "qaysi", "vaqtda", "soat", "qachon"],
-            "answer_text_uz": "⏰ Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha. Oldindan ro'yxatdan o'tishni unutmang!",
-            "answer_text_en": "⏰ Our reception hours are from 7:00 AM to 7:00 PM. Don't forget to book in advance!"
+            "answer_text_uz": "Bizning qabul vaqtlarimiz ertalab 7:00 dan kechasi 19:00 gacha. Oldindan ro'yxatdan o'tishni unutmang.",
+            "answer_text_en": "Our reception hours are from 7:00 AM to 7:00 PM. Don't forget to book in advance."
         },
         {
             "question_keywords": ["biz haqimizda", "markaz haqida", "biz kim", "about us", "about center", "who are we"],
-            "answer_text_uz": "Biz \"Hijama Centre\" klinikasi. Sog'ligingiz va go'zalligingiz uchun keng turdagi tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya.",
-            "answer_text_en": "We are \"Hijama Centre.\" We offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology."
+            "answer_text_uz": "Biz Hijama Centre klinikasi. Sog'ligingiz va go'zalligingiz uchun tabiiy muolajalarni taklif etamiz. Muolajalarimiz: Hijoma, Massaj, Manual terapiya, Girodoterapiya va Kosmetologiya.",
+            "answer_text_en": "We are Hijama Centre. We offer a wide range of natural treatments for your health and beauty. Our services include: Hijama, Massage, Manual Therapy, Hirudotherapy, and Kosmetology."
         }
     ]
 
@@ -223,6 +223,7 @@ You MUST automatically detect the language of the user's message (Uzbek or Engli
 6.  **Only answer questions. Do not add "Yes" or similar affirmative or redundant words from yourself. Provide only the requested information.**
 7.  **If the user refers with words like "want to study", "courses", "study", "teach", "course" (in Uzbek or English), first provide full information about our training courses, then suggest contacting for prices.**
 8.  **Make your responses as short and concise as possible. Do not use unnecessary sentences. Try to respond within 100-150 tokens.**
+9.  **Do not use emojis.**
 
 Our main services:
 -   **Hijama (cupping therapy):** An ancient natural method of body cleansing and treating various diseases. It is considered a Sunnah act in Islam.
@@ -303,7 +304,7 @@ def webhook():
                         phone_number = found_phone_numbers[0]
                         logging.info(f"📞 Telefon raqami aniqlandi: {phone_number}")
                         send_to_telegram_bot(sender_id, phone_number, user_msg)
-                        reply = "Ajoyib! Telefon raqamingizni qabul qildik. ✅ Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat!"
+                        reply = "Ajoyib! Telefon raqamingizni qabul qildik. Tez orada operatorlarimiz siz bilan bog'lanishadi. E'tiboringiz uchun rahmat!"
                         send_message(sender_id, reply)
                         # Suhbat holatini tozalash
                         user_state.pop(sender_id, None)
@@ -346,7 +347,7 @@ def webhook():
                     if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower or "hello" in user_msg_lower:
                         if sender_id not in user_last_greeting_time or \
                            (current_time - user_last_greeting_time[sender_id]) > 24 * 3600:
-                            reply = "Va alaykum assalam! Xush kelibsiz! 👋 Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "Hello! Welcome! 👋 How can I help you?"
+                            reply = "Va alaykum assalam! Xush kelibsiz! Qanday yordam bera olaman?" if "assalamu alaykum" in user_msg_lower or "salom" in user_msg_lower else "Hello! Welcome! How can I help you?"
                             user_last_greeting_time[sender_id] = current_time
                             send_message(sender_id, reply)
                             return "ok", 200
