@@ -3,12 +3,12 @@ import requests
 import os
 import google.generativeai as genai
 import logging
-import re # Regular expressions for phone number detection
-import time # Vaqtni eslab qolish uchun
-import json # __firebase_config ni yuklash uchun
-import firebase_admin # Firestore uchun
+import re
+import time
+import json
+import firebase_admin
 from firebase_admin import credentials, firestore
-import hashlib # Kesh kalitini yaratish uchun
+import hashlib
 
 # Log configuration
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -173,7 +173,7 @@ def add_initial_faqs():
         {
             "question_keywords": ["kosmetologiya", "cosmetology"],
             "answer_text_uz": "✨ Kosmetologiya – bu tabiiy mahsulotlar va usullar yordamida yuz va tana terisini parvarish qilish.\nBatafsil ma'lumot uchun biz bilan bog'laning yoki telefon raqamingizni qoldiring.",
-            "answer_text_en": "✨ Cosmetology is the care of face and body skin using natural products and methods.\nFor detailed information, please contact us or leave your phone number."
+            "answer_text_en": "✨ Kosmetology is the care of face and body skin using natural products and methods.\nFor detailed information, please contact us or leave your phone number."
         },
         {
             "question_keywords": ["kurslar", "o'qimoqchiman", "o'qish", "o'rgatish", "o'rgating", "kurs", "courses", "study", "learn", "teach"],
@@ -289,6 +289,40 @@ def verify():
 # Phone number detection regex
 PHONE_NUMBER_REGEX = re.compile(r'\+?\d{9,15}')
 
+# Price-related keywords and service-to-phrase mapping
+PRICE_KEYWORDS = ["narx", "qancha", "turadi", "pul", "to'lov", "ijara", "cost", "price", "how much", "rent"]
+SERVICE_KEYWORDS_MAP_UZ = {
+    "hijoma": "Hijoma muolajasi",
+    "hijama": "Hijoma muolajasi",
+    "cupping": "Hijoma muolajasi",
+    "massaj": "Massaj muolajasi",
+    "massage": "Massaj muolajasi",
+    "girodoterapiya": "Girodoterapiya muolajasi",
+    "zuluk": "Girodoterapiya muolajasi",
+    "leech": "Girodoterapiya muolajasi",
+    "manual terapiya": "Manual terapiya muolajasi",
+    "kosmetologiya": "Kosmetologiya muolajasi",
+    "kurslar": "Kurslar",
+    "o'qish": "Kurslar",
+    "ijara": "Ijara"
+}
+SERVICE_KEYWORDS_MAP_EN = {
+    "hijoma": "Hijama therapy",
+    "hijama": "Hijama therapy",
+    "cupping": "Hijama therapy",
+    "massaj": "Massage therapy",
+    "massage": "Massage therapy",
+    "girodoterapiya": "Hirudotherapy",
+    "zuluk": "Hirudotherapy",
+    "leech": "Hirudotherapy",
+    "manual terapiya": "Manual therapy",
+    "kosmetologiya": "Cosmetology",
+    "kurslar": "Courses",
+    "o'qish": "Courses",
+    "ijara": "Rent"
+}
+
+
 # Message processing (POST)
 @app.route("/webhook", methods=["POST"])
 def webhook():
@@ -321,7 +355,45 @@ def webhook():
                     user_msg = messaging_event["message"]["text"]
                     logging.info(f"👤 Foydalanuvchidan xabar ({sender_id}): {user_msg}")
                     user_msg_lower = user_msg.lower()
+                    
+                    detected_lang = 'uz'
+                    if any(keyword in user_msg_lower for keyword in ["address", "location", "services", "contact", "phone", "price", "course", "thank you", "thanks", "called", "contacted", "about", "rent"]):
+                        detected_lang = 'en'
 
+                    # ----------------------------------------------------------------------
+                    # Yangi: Narx so'rovi uchun aniq javob berish logikasi
+                    # ----------------------------------------------------------------------
+                    if any(pk in user_msg_lower for pk in PRICE_KEYWORDS):
+                        found_service = None
+                        if detected_lang == 'uz':
+                            for keyword, service_name in SERVICE_KEYWORDS_MAP_UZ.items():
+                                if keyword in user_msg_lower:
+                                    found_service = service_name
+                                    break
+                        else:
+                            for keyword, service_name in SERVICE_KEYWORDS_MAP_EN.items():
+                                if keyword in user_msg_lower:
+                                    found_service = service_name
+                                    break
+                        
+                        if found_service:
+                            if detected_lang == 'uz':
+                                reply = f"📞 {found_service} narxlari haqida batafsil ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Biz siz bilan tez orada bog'lanamiz!"
+                                bot_last_phone_request_message[sender_id] = f"{found_service} narxlari haqida"
+                            else:
+                                reply = f"📞 To get detailed information about the price of {found_service}, please leave your phone number. We will contact you shortly!"
+                                bot_last_phone_request_message[sender_id] = f"Price of {found_service}"
+                        else:
+                            if detected_lang == 'uz':
+                                reply = "📞 Narxlar haqida batafsil ma'lumot olish uchun, iltimos, telefon raqamingizni qoldiring. Biz siz bilan tez orada bog'lanamiz!"
+                                bot_last_phone_request_message[sender_id] = "Narxlar haqida"
+                            else:
+                                reply = "📞 To get detailed information about prices, please leave your phone number. We will contact you shortly!"
+                                bot_last_phone_request_message[sender_id] = "Prices"
+                        send_message(sender_id, reply)
+                        return "ok", 200
+                    # ----------------------------------------------------------------------
+                    
                     # Agar xabarda telefon raqami bo'lsa
                     found_phone_numbers = PHONE_NUMBER_REGEX.findall(user_msg)
                     if found_phone_numbers:
@@ -363,11 +435,6 @@ def webhook():
 
                     # FAQ'lardan mos javobni qidirish
                     matched_faq_answer = None
-                    detected_lang = 'uz'
-                    
-                    if any(keyword in user_msg_lower for keyword in ["address", "location", "services", "contact", "phone", "price", "course", "thank you", "thanks", "called", "contacted", "about", "rent"]):
-                        detected_lang = 'en'
-                    
                     user_msg_words = set(user_msg_lower.split())
 
                     for faq in cached_faqs:
@@ -429,7 +496,7 @@ def ask_gemini(question, system_prompt):
         reply_text = re.sub(r'\n+', '\n', reply_text).strip()
         
         # Check if an emoji exists in the response, if not add one
-        has_emoji = any(c in reply_text for c in ['📞', '😊', '👍','🩸', '💆‍♂️', '💧', '✨', '📍', '✅','⏰', '👋'])
+        has_emoji = any(c in reply_text for c in ['📞', '😊', '�', '🌸', '🩸', '💆‍♂️', '💧', '✋', '✨', '👩‍🎓', '📜', '📍', '✅', '💵', '🥺', '⏰', '✍️', '👋'])
         if not has_emoji:
             reply_text += " 😊"
 
