@@ -176,4 +176,3 @@ def run_insta_bot():
 
 if __name__ == "__main__":
     run_insta_bot()
-�
