@@ -55,7 +55,7 @@ FAQS = {
         "location": "📍 Our center is located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A.",
         "courses": "👩‍🎓 We have specialized courses for those who want to build a career in natural medicine.\nUpon successful completion, you will receive an Egyptian Certificate. 📜",
         "contact": "📞 You can reach us at:\n- Phone: +998 90 988 03 03\n- Telegram: @hijamacentre1",
-        "price": "📞 To get detailed information about prices, please leave your phone number. We will contact you shortly! 😊",
+        "price": "📞 To get detailed information about prices, please leave your phone number. We will contact you shortly! �",
         "rent": "📞 To get detailed information about rent, please leave your phone number.\nWe will contact you shortly! 😊",
         "cosmetology": "💄 Our cosmetology services focus on skin care for the face and body. Please contact us for more information.",
         "doctor": "👨‍⚕️ Our clinic employs medical professionals. They are always ready to assist you.",
@@ -85,12 +85,12 @@ def run_insta_bot():
     cl = Client()
     try:
         logging.info("⏳ Instagram'ga kirish...")
-        # Устанавливаем правильный IP-адрес для клиента
-        cl.set_proxy('http://269.0.0.18:75') 
+        # Удаляем установку прокси, так как указанный IP-адрес недействителен.
+        # Если вам действительно нужен прокси, укажите действительный IP-адрес и порт.
         cl.login(INSTA_USERNAME, INSTA_PASSWORD)
         logging.info("✅ Instagram'ga muvaffaqiyatli kirildi.")
     except ClientError as e:
-        logging.error(f"❌ Instagram'ga kirishda xato: {e}. Iltimos, login ma'lumotlaringizni tekshiring yoki IP-adresni yangilang.")
+        logging.error(f"❌ Instagram'ga kirishda xato: {e}. Iltimos, login ma'lumotlaringizni tekshiring.")
         return
     except Exception as e:
         logging.error(f"❌ Kutilmagan xato yuz berdi: {e}")
@@ -176,3 +176,4 @@ def run_insta_bot():
 
 if __name__ == "__main__":
     run_insta_bot()
+�
