@@ -55,8 +55,8 @@ FAQS = {
         "location": "📍 Our center is located at: Toshkent city, Shaykhontokhur district, Samarqand Darvoza, 149A.",
         "courses": "👩‍🎓 We have specialized courses for those who want to build a career in natural medicine.\nUpon successful completion, you will receive an Egyptian Certificate. 📜",
         "contact": "📞 You can reach us at:\n- Phone: +998 90 988 03 03\n- Telegram: @hijamacentre1",
-        "price": "📞 To get detailed information about prices, please leave your phone number. We will contact you shortly! �",
-        "rent": "📞 To get detailed information about rent, please leave your phone number.\nWe will contact you shortly! 😊",
+        "price": "📞 To get detailed information about prices, please leave your phone number. We will contact you shortly! 😊",
+        "rent": "📞 To get detailed information about rent, please leave your phone number.\nWe will contact you shortly! �",
         "cosmetology": "💄 Our cosmetology services focus on skin care for the face and body. Please contact us for more information.",
         "doctor": "👨‍⚕️ Our clinic employs medical professionals. They are always ready to assist you.",
         "job": "💼 For information on job vacancies, please leave your phone number. We will contact you shortly!",
@@ -85,8 +85,6 @@ def run_insta_bot():
     cl = Client()
     try:
         logging.info("⏳ Instagram'ga kirish...")
-        # Удаляем установку прокси, так как указанный IP-адрес недействителен.
-        # Если вам действительно нужен прокси, укажите действительный IP-адрес и порт.
         cl.login(INSTA_USERNAME, INSTA_PASSWORD)
         logging.info("✅ Instagram'ga muvaffaqiyatli kirildi.")
     except ClientError as e:
@@ -115,7 +113,13 @@ def run_insta_bot():
                 
                 last_message = thread.messages[0]
                 
-                if last_message.user_id == cl.user_id or last_message.item_type != 'text':
+                if last_message.user_id == cl.user_id:
+                    processed_thread_ids.add(thread_id)
+                    continue
+
+                # Faqat matnli xabarlarni qayta ishlash
+                if last_message.item_type != 'text':
+                    logging.info(f"Foydalanuvchidan matn bo'lmagan xabar ({last_message.item_type}). E'tiborsiz qoldiriladi.")
                     processed_thread_ids.add(thread_id)
                     continue
                 
