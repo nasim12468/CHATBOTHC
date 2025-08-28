@@ -133,9 +133,9 @@ def run_insta_bot():
 
     while True:
         try:
-            inbox_threads = cl.direct_inbox(amount=20)
+            inbox_threads = cl.direct_threads(amount=20) # Исправлено
             
-            for thread in inbox_threads.threads:
+            for thread in inbox_threads:
                 thread_id = thread.id
                 
                 if thread_id in processed_thread_ids:
