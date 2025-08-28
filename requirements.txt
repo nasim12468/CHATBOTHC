@@ -1,4 +1,2 @@
-Flask
-requests
+instagrapi
 google-generativeai
-firebase-admin
